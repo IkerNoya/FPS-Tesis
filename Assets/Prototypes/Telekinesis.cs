@@ -5,6 +5,7 @@ using UnityEngine;
 public class Telekinesis : MonoBehaviour
 {
     [SerializeField] float targetMoveSpeed;
+    [SerializeField] float pushForce;
     [SerializeField] LayerMask targetLayer;
     [SerializeField] Camera cam;
     [SerializeField] Transform finalPos;
@@ -14,11 +15,6 @@ public class Telekinesis : MonoBehaviour
     bool canPull = true;
     bool moveToPos = false;
 
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
         Vector3 mousePos = Input.mousePosition;
@@ -26,7 +22,6 @@ public class Telekinesis : MonoBehaviour
         RaycastHit hit;
         if (Input.GetKeyDown(KeyCode.Q) && canPull && Physics.Raycast(ray, out hit, 30, targetLayer))
         {
-            Debug.Log("Hola");
             target = hit.transform;
             moveToPos = true;
             target.GetComponent<Rigidbody>().useGravity = false;
@@ -39,7 +34,7 @@ public class Telekinesis : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse1) && target!=null)
         {
             target.GetComponent<Rigidbody>().useGravity = true;
-            target.GetComponent<Rigidbody>().AddForce(transform.forward * 1000);
+            target.GetComponent<Rigidbody>().AddForce(transform.forward * pushForce);
             moveToPos = false;
             target = null;
             canPull = true;

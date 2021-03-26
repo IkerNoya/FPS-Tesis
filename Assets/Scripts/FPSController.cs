@@ -5,6 +5,7 @@ using UnityEngine;
 public class FPSController : MonoBehaviour
 {
     [SerializeField] float speed;
+    [SerializeField] float sprintSpeed;
     [SerializeField] float groundDistance;
     [SerializeField] float jumpHeight;
     [SerializeField] Camera cam;
@@ -39,7 +40,10 @@ public class FPSController : MonoBehaviour
 
         movement = transform.right * x + transform.forward * z;
 
-        controller.Move(movement * speed * Time.deltaTime);
+        if(Input.GetKey(KeyCode.LeftShift))
+            controller.Move(movement * sprintSpeed * Time.deltaTime);
+        else
+            controller.Move(movement * speed * Time.deltaTime);
 
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
