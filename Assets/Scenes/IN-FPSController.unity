@@ -756,6 +756,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   sprintSpeed: 8
+  crouchSpeed: 3
   groundDistance: 0.4
   jumpHeight: 2
   cam: {fileID: 963194227}
@@ -763,6 +764,8 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 256
+  crouchToggle: 1
+  sprintToggle: 0
 --- !u!114 &1416346158
 MonoBehaviour:
   m_ObjectHideFlags: 0
