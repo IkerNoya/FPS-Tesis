@@ -6,17 +6,20 @@ public class FPSController : MonoBehaviour
 {
     [SerializeField] float speed;
     [SerializeField] float sprintSpeed;
+    [SerializeField] float crouchMovementSpeed;
     [SerializeField] float crouchSpeed;
     [SerializeField] float groundDistance;
     [SerializeField] float jumpHeight;
-    [SerializeField] Camera cam;
     [SerializeField] Transform groundCheck;
+    [SerializeField] Transform Head;
+    [SerializeField] Transform CrouchedHead;
     [SerializeField] LayerMask groundMask;
 
     public bool crouchToggle;
     public bool sprintToggle;
 
     CharacterController controller;
+    GameObject camera;
 
     float gravity = -9.81f * 2;
     float yNegativeVelocity = -2;
@@ -31,6 +34,7 @@ public class FPSController : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        camera = Camera.main.gameObject;
     }
 
     void Update()
@@ -39,7 +43,6 @@ public class FPSController : MonoBehaviour
 
         if(isGrounded && velocity.y < 0)
             velocity.y = yNegativeVelocity;
-        
 
         //movement + sprint
         float x = Input.GetAxis("Horizontal");
@@ -53,50 +56,54 @@ public class FPSController : MonoBehaviour
 
         Inputs();
         Movement();
+        HeadMovement();
     }
     void Inputs()
     {
         //movement
-        if (!sprintToggle)
+        if (isGrounded)
         {
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (!sprintToggle)
             {
-                isSprinting = true;
-                isCrouched = false;
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    isSprinting = true;
+                    isCrouched = false;
+                }
+                else
+                    isSprinting = false;
             }
             else
-                isSprinting = false;
-        }
-        else
-        {
-            if (Input.GetKeyDown(KeyCode.LeftShift) && !isSprinting)
             {
-                isSprinting = true;
-                isCrouched = false;
+                if (Input.GetKeyDown(KeyCode.LeftShift) && !isSprinting)
+                {
+                    isSprinting = true;
+                    isCrouched = false;
+                }
+                else if (Input.GetKeyDown(KeyCode.LeftShift) && isSprinting)
+                    isSprinting = false;
             }
-            else if (Input.GetKeyDown(KeyCode.LeftShift) && isSprinting)
-                isSprinting = false;
-        }
 
-        if(!crouchToggle)
-        {
-            if (Input.GetKey(KeyCode.LeftControl))
+            if (!crouchToggle)
             {
-                isCrouched = true;
-                isSprinting = false;
+                if (Input.GetKey(KeyCode.LeftControl))
+                {
+                    isCrouched = true;
+                    isSprinting = false;
+                }
+                else
+                    isCrouched = false;
             }
             else
-                isCrouched = false;
-        }
-        else
-        {
-            if (Input.GetKeyDown(KeyCode.LeftControl) && !isCrouched)
             {
-                isCrouched = true;
-                isSprinting = false;
+                if (Input.GetKeyDown(KeyCode.LeftControl) && !isCrouched)
+                {
+                    isCrouched = true;
+                    isSprinting = false;
+                }
+                else if (Input.GetKeyDown(KeyCode.LeftControl) && isCrouched)
+                    isCrouched = false;
             }
-            else if (Input.GetKeyDown(KeyCode.LeftControl) && isCrouched)
-                isCrouched = false;
         }
 
         //jump
@@ -108,8 +115,22 @@ public class FPSController : MonoBehaviour
         if(isSprinting)
             controller.Move(movement * sprintSpeed * Time.deltaTime);
         if (isCrouched)
-            controller.Move(movement * crouchSpeed * Time.deltaTime);
+            controller.Move(movement * crouchMovementSpeed * Time.deltaTime);
         if (!isSprinting && !isCrouched)
             controller.Move(movement * speed * Time.deltaTime);
+    }
+    void HeadMovement()
+    {
+        float height = camera.transform.position.y;
+        if (isCrouched && height >= CrouchedHead.position.y)
+            height -= Time.deltaTime * crouchSpeed;
+        else if(!isCrouched)
+        {
+            if (height < Head.position.y)
+                height += Time.deltaTime * crouchSpeed;
+            else
+                return;
+        }
+        camera.transform.position = new Vector3(camera.transform.position.x, height, camera.transform.position.z);
     }
 }
