@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Pistol : Weapon
 {
+    void Start()
+    {
+        currentAmmo = ammo;
+    }
     void Update()
     {
         if(Input.GetButton("Fire1") && canShoot && shootTimer <= 0 && currentAmmo > 0)

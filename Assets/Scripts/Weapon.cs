@@ -35,16 +35,10 @@ public class Weapon : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, range))
         {
-            //if (hit.collider.CompareTag("Enemy"))
-            //{
-            //    //example of blood
-            //    //Instantiate(enemyHitParticle, hit.point, Quaternion.LookRotation(hit.normal));
-            //}
-            //else
-            //{
-            //    //example of particle
-            //    //Instantiate(hitParticle, hit.point, Quaternion.LookRotation(hit.normal));
-            //}
+            if (hit.collider.CompareTag("Enemy"))
+            {
+                hit.collider.gameObject.GetComponent<Rigidbody>().AddForce((hit.point - transform.position) * 30);
+            }
         }
 
         currentAmmo--;
