@@ -10,19 +10,27 @@ public class FPSController : MonoBehaviour
     [SerializeField] float crouchSpeed;
     [SerializeField] float groundDistance;
     [SerializeField] float jumpHeight;
+    [Space]
+    [SerializeField] float headBobbingIntensity;
+    [SerializeField] float walkingHeadBobFrequency;
+    [SerializeField] float sprintingHeadBobFrequency;
+    [SerializeField] float crouchingHeadVerticalAmplitude;
+    [SerializeField] float standingHeadBobVerticalAmplitude;
+    [Space]
+    [SerializeField] Transform cam;
     [SerializeField] Transform groundCheck;
     [SerializeField] Transform Head;
     [SerializeField] Transform CrouchedHead;
     [SerializeField] LayerMask groundMask;
 
-    public bool crouchToggle;
-    public bool sprintToggle;
-
     CharacterController controller;
-    GameObject camera;
 
     float gravity = -9.81f * 2;
     float yNegativeVelocity = -2;
+    float timeWalking;
+    float hBobFrequency;
+    float hBobVerticalAmplitude;
+    float axisDifference = 0.001f;
 
     Vector3 movement;
     Vector3 velocity;
@@ -34,7 +42,7 @@ public class FPSController : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
-        camera = Camera.main.gameObject;
+        cam = Camera.main.transform;
     }
 
     void Update()
@@ -48,62 +56,44 @@ public class FPSController : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
+        if (Mathf.Abs(x) > 0 || Mathf.Abs(z) > 0)
+            timeWalking += Time.deltaTime;
+        else
+            timeWalking = 0;
+
         movement = transform.right * x + transform.forward * z;
 
         //jump + artificial gravity
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
 
+        
+
         Inputs();
         Movement();
-        HeadMovement();
+        Crouch();
+        HeadBobbing();
     }
     void Inputs()
     {
         //movement
         if (isGrounded)
         {
-            if (!sprintToggle)
+            if (Input.GetKey(KeyCode.LeftShift))
             {
-                if (Input.GetKey(KeyCode.LeftShift))
-                {
-                    isSprinting = true;
-                    isCrouched = false;
-                }
-                else
-                    isSprinting = false;
+                isSprinting = true;
+                isCrouched = false;
             }
             else
-            {
-                if (Input.GetKeyDown(KeyCode.LeftShift) && !isSprinting)
-                {
-                    isSprinting = true;
-                    isCrouched = false;
-                }
-                else if (Input.GetKeyDown(KeyCode.LeftShift) && isSprinting)
-                    isSprinting = false;
-            }
+                isSprinting = false;
 
-            if (!crouchToggle)
+            if (Input.GetKeyDown(KeyCode.LeftControl) && !isCrouched)
             {
-                if (Input.GetKey(KeyCode.LeftControl))
-                {
-                    isCrouched = true;
-                    isSprinting = false;
-                }
-                else
-                    isCrouched = false;
+                isCrouched = true;
+                isSprinting = false;
             }
-            else
-            {
-                if (Input.GetKeyDown(KeyCode.LeftControl) && !isCrouched)
-                {
-                    isCrouched = true;
-                    isSprinting = false;
-                }
-                else if (Input.GetKeyDown(KeyCode.LeftControl) && isCrouched)
+            else if (Input.GetKeyDown(KeyCode.LeftControl) && isCrouched)
                     isCrouched = false;
-            }
         }
 
         //jump
@@ -119,18 +109,63 @@ public class FPSController : MonoBehaviour
         if (!isSprinting && !isCrouched)
             controller.Move(movement * speed * Time.deltaTime);
     }
-    void HeadMovement()
+    void Crouch()
     {
-        float height = camera.transform.position.y;
-        if (isCrouched && height >= CrouchedHead.position.y)
+        float height = cam.position.y;
+        if (isCrouched && height > CrouchedHead.position.y + 0.5f)
             height -= Time.deltaTime * crouchSpeed;
-        else if(!isCrouched)
+
+
+        cam.position = new Vector3(cam.position.x, height, cam.position.z);
+    }
+
+    void HeadBobbing()
+    {
+        Vector3 newHeadPosition;
+        if (!isCrouched)
+            newHeadPosition = Head.position + CalculateHeadBobOffset(timeWalking);
+        else
+            newHeadPosition = CrouchedHead.position + CalculateHeadBobOffset(timeWalking);
+
+        if (isSprinting && !isCrouched)
         {
-            if (height < Head.position.y)
-                height += Time.deltaTime * crouchSpeed;
-            else
-                return;
+            hBobFrequency = sprintingHeadBobFrequency;
+            hBobVerticalAmplitude = standingHeadBobVerticalAmplitude;
         }
-        camera.transform.position = new Vector3(camera.transform.position.x, height, camera.transform.position.z);
+        else if (!isSprinting && isCrouched)
+        {
+            hBobFrequency = walkingHeadBobFrequency;
+            hBobVerticalAmplitude = crouchingHeadVerticalAmplitude;
+        }
+        else
+        {
+            hBobFrequency = walkingHeadBobFrequency;
+            hBobVerticalAmplitude = standingHeadBobVerticalAmplitude;
+        }
+
+        if (isGrounded)
+        {
+            cam.position = Vector3.Lerp(cam.position, newHeadPosition, headBobbingIntensity);
+            if ((cam.position - newHeadPosition).magnitude <= axisDifference)
+            {
+                cam.position = newHeadPosition;
+            }
+        }
+
+
+    }
+    Vector3 CalculateHeadBobOffset(float value)
+    {
+        float movement;
+        Vector3 offset = Vector3.zero;
+        if (value > 0)
+        {
+            movement = Mathf.Sin(value * hBobFrequency * 2) * hBobVerticalAmplitude;
+            if (!isCrouched)
+                offset = Head.transform.up * movement;
+            else
+                offset = CrouchedHead.transform.up * movement;
+        }
+        return offset;
     }
 }

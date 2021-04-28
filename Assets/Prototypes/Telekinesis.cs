@@ -25,16 +25,21 @@ public class Telekinesis : MonoBehaviour
             target = hit.transform;
             moveToPos = true;
             target.GetComponent<Rigidbody>().useGravity = false;
+            target.GetComponent<Rigidbody>().velocity = Vector3.zero;
             canPull = false;
         }
         if (moveToPos)
         {
-            target.position = Vector3.Lerp(target.position, finalPos.position, Time.deltaTime * targetMoveSpeed);
+            if (target != null) target.position = Vector3.Lerp(target.position, finalPos.position, Time.deltaTime * targetMoveSpeed);
+        }
+        else
+        {
+            if(target!=null) target.GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
         if (Input.GetKeyDown(KeyCode.Mouse1) && target!=null)
         {
             target.GetComponent<Rigidbody>().useGravity = true;
-            target.GetComponent<Rigidbody>().AddForce(transform.forward * pushForce);
+            target.GetComponent<Rigidbody>().AddForce(ray.direction * pushForce);
             moveToPos = false;
             target = null;
             canPull = true;
