@@ -13,7 +13,7 @@ public class Pistol : Weapon
         if(Input.GetButton("Fire1") && canShoot && shootTimer <= 0 && currentAmmo > 0)
         {
             Shoot();
-            mouseLook.AddRecoil(verticalRecoil, horizontalRecoil);
+            mouseLook.AddRecoil(verticalRecoil, Random.Range(-horizontalRecoil, horizontalRecoil));
         }
         if(Input.GetKeyDown(KeyCode.R) && currentAmmo < ammo && !isReloading)
         {
