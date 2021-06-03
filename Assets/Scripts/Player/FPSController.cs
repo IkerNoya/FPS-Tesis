@@ -99,6 +99,12 @@ public class FPSController : MonoBehaviour
         //jump
         if (Input.GetButtonDown("Jump") && isGrounded)
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity); // jump formula: result = sqrt( h * -2 * g)
+
+
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.Escape))
+            UnityEditor.EditorApplication.isPlaying = false;
+#endif 
     }
     void Movement()
     {
