@@ -15,6 +15,7 @@ public class PlayerHUD : MonoBehaviour
 
     void Update()
     {
-        healthPoints.text = "HP: " + hpController.GetHP().ToString();
+        if(healthPoints!=null)
+            healthPoints.text = "HP: " + hpController.GetHP().ToString();
     }
 }
