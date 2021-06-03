@@ -7,9 +7,10 @@ public class HPController : MonoBehaviour
 {
     [SerializeField] int maxHP;
 
-    int hp;
+    float hp;
 
     bool isAlive=true;
+    bool canHeal = false;
     void Awake()
     {
         Player.TakeDamage += TakeDamage;
@@ -27,13 +28,13 @@ public class HPController : MonoBehaviour
     public void RegenerateHP(int regenAmmount)
     {
         if (hp < maxHP)
-            hp += regenAmmount;
+            hp += regenAmmount * Time.deltaTime;
 
         if (hp > maxHP)
             hp = maxHP;
     }
 
-    public int GetHP()
+    public float GetHP()
     {
         return hp;
     }
@@ -43,15 +44,23 @@ public class HPController : MonoBehaviour
         return maxHP;
     }
 
-
     public bool GetIsAlive()
     {
         return isAlive;
+    }
+    public bool GetCanHeal()
+    {
+        return canHeal;
+    }
+    public void SetCanHeal(bool value)
+    {
+        canHeal = value;
     }
 
     void TakeDamage(Player player, int value)
     {
         hp -= value;
+        canHeal = false;
     }
 
     private void OnDestroy()
