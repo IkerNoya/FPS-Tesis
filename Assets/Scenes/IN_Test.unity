@@ -1262,6 +1262,11 @@ PrefabInstance:
       propertyPath: verticalRecoil
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 6380721928975121257, guid: b21ff3a0dfca5bb48a67570255300831,
+        type: 3}
+      propertyPath: maxHP
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 8512898869019962016, guid: b21ff3a0dfca5bb48a67570255300831,
         type: 3}
       propertyPath: m_Name
