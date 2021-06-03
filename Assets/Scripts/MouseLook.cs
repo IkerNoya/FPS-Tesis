@@ -9,6 +9,9 @@ public class MouseLook : MonoBehaviour
     [SerializeField] Transform body;
 
     float xRotation = 0;
+    float verticalRecoil = 0;
+    float horizontalRecoil = 0;
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -16,14 +19,22 @@ public class MouseLook : MonoBehaviour
 
     void Update()
     {
-        float mouseX = Input.GetAxis("Mouse X") * horizontalSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * verticalSensitivity * Time.deltaTime; 
+        float mouseX = horizontalRecoil + Input.GetAxis("Mouse X") * horizontalSensitivity * Time.deltaTime;
+        float mouseY = verticalRecoil + Input.GetAxis("Mouse Y") * verticalSensitivity * Time.deltaTime;
+        //restart recoil after 1 frame
+        verticalRecoil = 0;
+        horizontalRecoil = 0;
 
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        transform.localRotation = Quaternion.Euler(xRotation,0,0);
-        if (body!=null)
+        transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
+        if (body != null)
             body.Rotate(Vector3.up * mouseX);
+    }
+    public void AddRecoil(float vertical, float horizontal)
+    {
+        verticalRecoil += vertical;
+        horizontalRecoil += horizontal;
     }
 }
