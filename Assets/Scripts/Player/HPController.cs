@@ -1,19 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using System;
 
 public class HPController : MonoBehaviour
 {
     [SerializeField] int maxHP;
 
+
     float hp;
 
     bool isAlive=true;
     bool canHeal = false;
-    void Awake()
+    void Start()
     {
-        Player.TakeDamage += TakeDamage;
         hp = maxHP;
     }
 
@@ -23,6 +23,7 @@ public class HPController : MonoBehaviour
             return;
 
         isAlive = false;
+        hp = 0;
     }
 
     public void RegenerateHP(int regenAmmount)
@@ -57,14 +58,10 @@ public class HPController : MonoBehaviour
         canHeal = value;
     }
 
-    void TakeDamage(Player player, int value)
+    public void TakeDamage(int value)
     {
         hp -= value;
         canHeal = false;
     }
 
-    private void OnDestroy()
-    {
-        Player.TakeDamage -= TakeDamage;
-    }
 }

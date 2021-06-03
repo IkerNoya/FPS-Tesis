@@ -27,6 +27,11 @@ public class Weapon : MonoBehaviour
 
     protected bool isReloading = false;
     protected bool canShoot = true;
+    protected bool canReload = true;
+    void Awake()
+    {
+        Player.Died += PlayerDied;
+    }
     protected virtual void Shoot()
     {
         RaycastHit hit;
@@ -54,6 +59,11 @@ public class Weapon : MonoBehaviour
         isReloading = false;
         yield return null;
     }
+    void PlayerDied(Player player)
+    {
+        canReload = false;
+        canShoot = false;
+    }
     public int GetMaxAmmo()
     {
         return ammo;
@@ -65,5 +75,9 @@ public class Weapon : MonoBehaviour
     public void CanShootAfterSpawn()
     {
         canShoot = true;
+    }
+    void OnDestroy()
+    {
+        Player.Died -= PlayerDied;
     }
 }

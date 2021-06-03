@@ -6,10 +6,14 @@ using System;
 public class Player : MonoBehaviour
 {
     HPController hpController;
+
+    public static event Action<Player> Died;
+
     int damageTaken = 20;
-    public static event Action<Player, int> TakeDamage;
+
     float timer;
     float waitForHpRegen = 5f;
+
     void Start()
     {
         hpController = GetComponent<HPController>();
@@ -17,30 +21,36 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (!hpController.GetIsAlive())
+        if (!hpController.GetIsAlive() && hpController!=null)
             return;
 
         if (Input.GetKeyDown(KeyCode.KeypadEnter))
         {
-            TakeDamage?.Invoke(this, damageTaken);
-            hpController.SetCanHeal(false);
+            if (hpController != null)
+            {
+                hpController.TakeDamage(damageTaken);
+                hpController.SetCanHeal(false);
+            }
             timer = 0;
         }
 
-        if (!hpController.GetCanHeal())
+        if (hpController != null)
         {
-            if (timer >= waitForHpRegen)
+            if (!hpController.GetCanHeal())
             {
-                hpController.SetCanHeal(true);
-                timer = 0;
+                if (timer >= waitForHpRegen)
+                {
+                    hpController.SetCanHeal(true);
+                    timer = 0;
+                }
+                timer += Time.deltaTime;
             }
-            timer += Time.deltaTime;
-        }
-        else 
-        {
-            if (hpController.GetHP() < hpController.GetMaxHP())
+            else
             {
-                hpController.RegenerateHP(10);
+                if (hpController.GetHP() < hpController.GetMaxHP())
+                {
+                    hpController.RegenerateHP(10);
+                }
             }
         }
             
@@ -49,8 +59,13 @@ public class Player : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            TakeDamage?.Invoke(this, damageTaken);
-            hpController.SetCanHeal(false);
+            if (hpController != null)
+            {
+                hpController.TakeDamage(damageTaken);
+                hpController.SetCanHeal(false);
+                if (hpController.GetHP() <= 0)
+                    Died?.Invoke(this);
+            }
             timer = 0;
         }
     }

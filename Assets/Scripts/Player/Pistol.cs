@@ -17,7 +17,8 @@ public class Pistol : Weapon
         }
         if(Input.GetKeyDown(KeyCode.R) && currentAmmo < ammo && !isReloading)
         {
-            StartCoroutine(Reload(reloadSpeed));
+            if(canReload)
+                StartCoroutine(Reload(reloadSpeed));
         }
         shootTimer -= Time.deltaTime;
     }
