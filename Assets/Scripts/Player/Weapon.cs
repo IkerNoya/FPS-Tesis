@@ -27,6 +27,8 @@ public class Weapon : MonoBehaviour
 
     protected bool isReloading = false;
     protected bool canShoot = true;
+
+    [SerializeField] protected float stunDuration;
     protected virtual void Shoot()
     {
         RaycastHit hit;

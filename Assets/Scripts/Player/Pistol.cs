@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class Pistol : Weapon
 {
+        RaycastHit hit;
+        Vector3 mousePos;
+        Ray ray;
     void Start()
     {
         currentAmmo = ammo;
     }
     void Update()
     {
+        mousePos = Input.mousePosition;
+        ray = cam.ScreenPointToRay(mousePos);
+        Debug.DrawRay(transform.position, ray.direction * range, Color.magenta);
         if(Input.GetButton("Fire1") && canShoot && shootTimer <= 0 && currentAmmo > 0)
         {
             Shoot();
@@ -21,4 +27,19 @@ public class Pistol : Weapon
         }
         shootTimer -= Time.deltaTime;
     }
+
+    protected override void Shoot() {
+
+        if (Physics.Raycast(ray, out hit, range)) {
+            Debug.Log(hit.collider.tag);
+            if (hit.collider.CompareTag("Enemy")) {
+                Debug.Log("ASD");
+                hit.collider.GetComponent<IHittable>().HitWithStun(damage, stunDuration);
+            }
+        }
+
+        currentAmmo--;
+        shootTimer = fireRate;
+    }
+
 }
