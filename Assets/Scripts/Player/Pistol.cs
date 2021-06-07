@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Pistol : Weapon
 {
-        RaycastHit hit;
-        Vector3 mousePos;
-        Ray ray;
+    RaycastHit hit;
+    Vector3 mousePos;
+    Ray ray;
     void Start()
     {
         currentAmmo = ammo;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IHittable
 {
     HPController hpController;
 
@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (!hpController.GetIsAlive() && hpController!=null)
+        if (!hpController.GetIsAlive() && hpController != null)
             return;
 
         if (Input.GetKeyDown(KeyCode.KeypadEnter))
@@ -53,20 +53,30 @@ public class Player : MonoBehaviour
                 }
             }
         }
-            
+
     }
+
+    public void Hit(float damage)
+    {
+        if (hpController != null)
+        {
+            hpController.TakeDamage((int)damage);
+            hpController.SetCanHeal(false);
+            if (hpController.GetHP() <= 0)
+                Died?.Invoke(this);
+        }
+        timer = 0;
+    }
+    public void HitWithStun(float damage, float stunDuration)
+    {
+        //NADA 
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            if (hpController != null)
-            {
-                hpController.TakeDamage(damageTaken);
-                hpController.SetCanHeal(false);
-                if (hpController.GetHP() <= 0)
-                    Died?.Invoke(this);
-            }
-            timer = 0;
+            Hit(damageTaken);
         }
     }
 }
