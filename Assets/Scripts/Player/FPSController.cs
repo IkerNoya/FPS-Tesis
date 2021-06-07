@@ -106,10 +106,10 @@ public class FPSController : MonoBehaviour
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity); // jump formula: result = sqrt( h * -2 * g)
 
 
-#if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.Escape))
-            UnityEditor.EditorApplication.isPlaying = false;
-#endif 
+//#if UNITY_EDITOR
+//        if (Input.GetKeyDown(KeyCode.Escape))
+//            UnityEditor.EditorApplication.isPlaying = false;
+//#endif 
     }
     void Movement()
     {

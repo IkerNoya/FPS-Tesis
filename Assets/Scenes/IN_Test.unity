@@ -1173,6 +1173,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3680331119627920095, guid: b21ff3a0dfca5bb48a67570255300831,
+        type: 3}
+      propertyPath: chromaticAberration
+      value: 1.12
+      objectReference: {fileID: 0}
     - target: {fileID: 8512898869019962016, guid: b21ff3a0dfca5bb48a67570255300831,
         type: 3}
       propertyPath: m_Name

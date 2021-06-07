@@ -8,6 +8,7 @@ public class Player : MonoBehaviour, IHittable
     HPController hpController;
 
     public static event Action<Player> Died;
+    public static event Action<Player> TakeDamage;
 
     int damageTaken = 20;
 
@@ -21,17 +22,13 @@ public class Player : MonoBehaviour, IHittable
 
     void Update()
     {
+        
         if (!hpController.GetIsAlive() && hpController != null)
             return;
 
         if (Input.GetKeyDown(KeyCode.KeypadEnter))
         {
-            if (hpController != null)
-            {
-                hpController.TakeDamage(damageTaken);
-                hpController.SetCanHeal(false);
-            }
-            timer = 0;
+            Hit(damageTaken);
         }
 
         if (hpController != null)
@@ -64,6 +61,7 @@ public class Player : MonoBehaviour, IHittable
             hpController.SetCanHeal(false);
             if (hpController.GetHP() <= 0)
                 Died?.Invoke(this);
+            TakeDamage?.Invoke(this);
         }
         timer = 0;
     }

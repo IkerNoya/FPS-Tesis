@@ -105,7 +105,7 @@
                 //Sampling the noise texture while also making it move constantly
                 float noise = tex2D(_NoiseTexture, uv * _NoiseTexture_ST.xy + rand(_Time.x)).x;
 
-                //Getting random values from -1 to 1 every few frames to randomly change the speed and direction of the sine lines
+                //Getting random values from -  1 to 1 every few frames to randomly change the speed and direction of the sine lines
                 float sineLinesTime = _Time.y * _SineLinesSpeed * (rand(floor(_Time.y)) * 2.0 - 1.0);
                 float sineLines = sin(uv.y * _SineLinesAmount * UNITY_PI * 2.0 + sineLinesTime) * 0.5 + 0.5;
                 //Lines with a random 0-1 value, to be used as mask

@@ -11,6 +11,7 @@ public class Pistol : Weapon
     {
         currentAmmo = ammo;
     }
+
     void Update()
     {
         mousePos = Input.mousePosition;
@@ -35,7 +36,14 @@ public class Pistol : Weapon
             Debug.Log(hit.collider.tag);
             if (hit.collider.CompareTag("Enemy")) {
                 Debug.Log("ASD");
-                hit.collider.GetComponent<IHittable>().HitWithStun(damage, stunDuration);
+                if (hit.collider.GetComponent<IHittable>() != null) 
+                {
+                    hit.collider.GetComponent<IHittable>().HitWithStun(damage, stunDuration);
+                }
+                else
+                {
+                    hit.collider.gameObject.GetComponent<Rigidbody>().AddForce((hit.point - transform.position) * 30);
+                }
             }
         }
 
