@@ -5,6 +5,14 @@ using System;
 
 public class Player : MonoBehaviour, IHittable
 {
+    enum WeaponMode
+    {
+        Pistol, SMG, Shotgun, Rifle, GranadeLauncher
+    }
+
+    [SerializeField] WeaponMode equipedWeapon;
+    [SerializeField] List<GameObject> weapons;
+
     HPController hpController;
 
     public static event Action<Player> Died;
@@ -14,10 +22,12 @@ public class Player : MonoBehaviour, IHittable
 
     float timer;
     float waitForHpRegen = 5f;
+    
 
     void Start()
     {
         hpController = GetComponent<HPController>();
+        SetWeapon();
     }
 
     void Update()
@@ -51,6 +61,43 @@ public class Player : MonoBehaviour, IHittable
             }
         }
 
+        Inputs();
+    }
+
+    void SetWeapon()
+    {
+        for (int i = 0; i < weapons.Count; i++)
+            weapons[i].SetActive(false);
+
+        weapons[(int)equipedWeapon].SetActive(true);
+    }
+    void Inputs()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            equipedWeapon = WeaponMode.Pistol;
+            SetWeapon();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            equipedWeapon = WeaponMode.SMG;
+            SetWeapon();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            equipedWeapon = WeaponMode.Shotgun;
+            SetWeapon();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            equipedWeapon = WeaponMode.Rifle;
+            SetWeapon();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            equipedWeapon = WeaponMode.GranadeLauncher;
+            SetWeapon();
+        }
     }
 
     public void Hit(float damage)

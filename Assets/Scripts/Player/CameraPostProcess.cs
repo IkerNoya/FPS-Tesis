@@ -7,21 +7,24 @@ using UnityEngine;
 public class CameraPostProcess : MonoBehaviour
 {
     [SerializeField] Material Mat;
-    [SerializeField] float chromaticAberration;
     [SerializeField] float lensDistortion;
+    [SerializeField] float lineDisplacement;
+    [SerializeField] float sineLineThreshold;
     void Awake()
     {
         Player.TakeDamage += TakeDamage;
     }
     void Start()
     {
-        chromaticAberration = Mat.GetFloat("_ChromaticAberration");
         lensDistortion = Mat.GetFloat("_LensDistortion");
+        lineDisplacement = Mat.GetFloat("_LinesDisplacement");
+        sineLineThreshold = Mat.GetFloat("_SineLinesThreshold");
     }
     void TakeDamage(Player player)
     {
-        StartCoroutine(changeFloat("_ChromaticAberration", 30.0f, chromaticAberration));
         StartCoroutine(changeFloat("_LensDistortion", lensDistortion + 0.2f, lensDistortion));
+        StartCoroutine(changeFloat("_LinesDisplacement", 5.0f, lineDisplacement));
+        StartCoroutine(changeFloat("_SineLinesThreshold", 1.0f, sineLineThreshold));
     }
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
     {

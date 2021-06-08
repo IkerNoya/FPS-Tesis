@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+
     [SerializeField] protected Camera cam;
     [SerializeField] protected MouseLook mouseLook;
 
