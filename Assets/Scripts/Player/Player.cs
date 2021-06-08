@@ -5,13 +5,14 @@ using System;
 
 public class Player : MonoBehaviour, IHittable
 {
-    enum WeaponMode
+    public enum WeaponMode
     {
         Pistol, SMG, Shotgun, Rifle, GranadeLauncher
     }
 
     [SerializeField] WeaponMode equipedWeapon;
     [SerializeField] List<GameObject> weapons;
+    [SerializeField] List<Weapon> weaponsScript;
 
     HPController hpController;
 
@@ -98,6 +99,16 @@ public class Player : MonoBehaviour, IHittable
             equipedWeapon = WeaponMode.GranadeLauncher;
             SetWeapon();
         }
+    }
+
+    public WeaponMode GetWeaponMode()
+    {
+        return equipedWeapon;
+    }
+
+    public List<Weapon> GetWeapons()
+    {
+        return weaponsScript;
     }
 
     public void Hit(float damage)
