@@ -227,7 +227,7 @@ GameObject:
   - component: {fileID: 215900587}
   m_Layer: 0
   m_Name: Cube (3)
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -263,7 +263,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: f9c717e11fb192c4aa958181f2ebc67a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -320,7 +320,7 @@ GameObject:
   - component: {fileID: 244842826}
   m_Layer: 8
   m_Name: Cube (4)
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -356,7 +356,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 21c505286c5bbe045a472bee261889e8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -399,18 +399,58 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &323569827 stripped
+--- !u!1 &323569824 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 323569824, guid: b21ff3a0dfca5bb48a67570255300831,
+    type: 3}
+  m_PrefabInstance: {fileID: 1496042100198336990}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &323569825
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 323569827, guid: b21ff3a0dfca5bb48a67570255300831,
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 323569824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 697b1ac10f373f445a0e51b3450f5d43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 337580125}
+  mouseLook: {fileID: 337580121}
+  ammo: 1
+  fireRate: 2.5
+  damage: 100
+  verticalRecoil: 1
+  horizontalRecoil: 0
+  range: 1000
+  reloadSpeed: 3
+  muzzleFlash: {fileID: 0}
+  hitParticle: {fileID: 198917022394846920, guid: e1b08032bec16ba4eb1ae23cbd572664,
+    type: 3}
+  enemyHitParticle: {fileID: 0}
+  stunDuration: 2
+  granade: {fileID: 8278043907329323362, guid: 99c48ed4eceb7af498d7b868d5ae15b0, type: 3}
+  force: 2000
+--- !u!114 &337580121 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3680331119627920093, guid: b21ff3a0dfca5bb48a67570255300831,
     type: 3}
   m_PrefabInstance: {fileID: 1496042100198336990}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e2e5dece4793514fa8b634179f61f4d, type: 3}
+  m_Script: {fileID: 11500000, guid: 7155e2f5e23602f4590753570ec5bf41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!20 &337580125 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 3680331119627920089, guid: b21ff3a0dfca5bb48a67570255300831,
+    type: 3}
+  m_PrefabInstance: {fileID: 1496042100198336990}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &427985154
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,7 +465,7 @@ GameObject:
   - component: {fileID: 427985155}
   m_Layer: 0
   m_Name: Cube (2)
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -461,7 +501,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: f9c717e11fb192c4aa958181f2ebc67a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -720,7 +760,7 @@ GameObject:
   - component: {fileID: 711008447}
   m_Layer: 0
   m_Name: Cube (1)
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -756,7 +796,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: f9c717e11fb192c4aa958181f2ebc67a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -825,7 +865,7 @@ GameObject:
   - component: {fileID: 961957624}
   m_Layer: 0
   m_Name: Cube (5)
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -861,7 +901,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 21c505286c5bbe045a472bee261889e8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1233,15 +1273,40 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 323569827, guid: b21ff3a0dfca5bb48a67570255300831, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 753030337, guid: b21ff3a0dfca5bb48a67570255300831, type: 3}
+      propertyPath: hitParticle
+      value: 
+      objectReference: {fileID: 885583209112628587, guid: 7fd851cd68afcc14b98c6628be416315,
+        type: 3}
+    - target: {fileID: 1014023010, guid: b21ff3a0dfca5bb48a67570255300831, type: 3}
+      propertyPath: hitParticle
+      value: 
+      objectReference: {fileID: 885583209112628587, guid: 7fd851cd68afcc14b98c6628be416315,
+        type: 3}
     - target: {fileID: 1465297651, guid: b21ff3a0dfca5bb48a67570255300831, type: 3}
       propertyPath: ammo
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: 1465297651, guid: b21ff3a0dfca5bb48a67570255300831, type: 3}
+      propertyPath: hitParticle
+      value: 
+      objectReference: {fileID: 885583209112628587, guid: 7fd851cd68afcc14b98c6628be416315,
+        type: 3}
     - target: {fileID: 1218080501679748528, guid: b21ff3a0dfca5bb48a67570255300831,
         type: 3}
       propertyPath: ammo
       value: 
       objectReference: {fileID: 1496042100198336991}
+    - target: {fileID: 4790467733865949642, guid: b21ff3a0dfca5bb48a67570255300831,
+        type: 3}
+      propertyPath: hitParticle
+      value: 
+      objectReference: {fileID: 885583209112628587, guid: 7fd851cd68afcc14b98c6628be416315,
+        type: 3}
     - target: {fileID: 5296934885559831914, guid: b21ff3a0dfca5bb48a67570255300831,
         type: 3}
       propertyPath: weaponsScript.Array.size
@@ -1271,7 +1336,7 @@ PrefabInstance:
         type: 3}
       propertyPath: weaponsScript.Array.data[4]
       value: 
-      objectReference: {fileID: 323569827}
+      objectReference: {fileID: 323569825}
     - target: {fileID: 8512898869019962016, guid: b21ff3a0dfca5bb48a67570255300831,
         type: 3}
       propertyPath: m_Name
@@ -1337,7 +1402,8 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 323569827, guid: b21ff3a0dfca5bb48a67570255300831, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b21ff3a0dfca5bb48a67570255300831, type: 3}
 --- !u!114 &1496042100198336991 stripped
 MonoBehaviour:

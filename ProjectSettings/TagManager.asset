@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - Granade
+  - Environment
   layers:
   - Default
   - TransparentFX
@@ -19,7 +21,7 @@ TagManager:
   - Pickable
   - Enemy
   - PostProcessing
-  - 
+  - Granade
   - 
   - 
   - 
