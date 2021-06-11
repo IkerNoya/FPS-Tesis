@@ -16,9 +16,9 @@ public class CameraPostProcess : MonoBehaviour
     }
     void Start()
     {
-        lensDistortion = Mat.GetFloat("_LensDistortion");
-        lineDisplacement = Mat.GetFloat("_LinesDisplacement");
-        sineLineThreshold = Mat.GetFloat("_SineLinesThreshold");
+       Mat.SetFloat("_LensDistortion", lensDistortion);
+       Mat.SetFloat("_LinesDisplacement", lineDisplacement);
+       Mat.SetFloat("_SineLinesThreshold", sineLineThreshold);
     }
     void TakeDamage(Player player)
     {

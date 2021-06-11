@@ -21,6 +21,7 @@ TagManager:
   - Pickable
   - Enemy
   - PostProcessing
+  - Obstacle
   - Granade
   - 
   - 
