@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour, IHittable {
 
     [Header("Health Things")]
     [SerializeField] HPController hpController;
-    RaycastHit hit;
+    protected RaycastHit hit;
     private void Awake() {
         navMeshAgent.updateRotation = false;
     }
@@ -64,7 +64,7 @@ public class Enemy : MonoBehaviour, IHittable {
     protected virtual void FixedUpdate() {
         navMeshAgent.SetDestination(objective.transform.position);
     }
-    private void LateUpdate() {
+    protected virtual void LateUpdate() {
         transform.rotation = Quaternion.LookRotation((objective.transform.position - transform.position).normalized);
     }
     protected virtual void Attack() {
