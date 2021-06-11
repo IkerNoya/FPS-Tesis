@@ -666,7 +666,7 @@ GameObject:
   - component: {fileID: 8512898869019962020}
   m_Layer: 9
   m_Name: PlayerController
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -721,7 +721,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthPoints: {fileID: 1548867511319462979}
-  ammo: {fileID: 0}
+  ammo: {fileID: 7466982976428504766}
 --- !u!114 &5296934885559831914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -741,6 +741,12 @@ MonoBehaviour:
   - {fileID: 753030334}
   - {fileID: 1465297648}
   - {fileID: 323569824}
+  weaponsScript:
+  - {fileID: 4790467733865949642}
+  - {fileID: 1014023010}
+  - {fileID: 753030337}
+  - {fileID: 1465297651}
+  - {fileID: 323569827}
 --- !u!114 &6380721928975121257
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -5,59 +5,89 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour, IHittable {
 
     [Header("Nav Mehs Things")]
-    [SerializeField] float health;
-    [SerializeField] float speed;
-    [SerializeField] float acceleration;
-    [SerializeField] float damage;
-    [SerializeField] GameObject objective;
-    [SerializeField] NavMeshAgent navMeshAgent;
+    [SerializeField] protected float speed;
+    [SerializeField] protected float acceleration;
+    [SerializeField] protected GameObject objective;
+    [SerializeField] protected NavMeshAgent navMeshAgent;
 
     [Header("CC Things")]
-    [SerializeField] bool stunned;
-    [SerializeField] float timerStunned = 0;
-    [SerializeField] float maxTimerStunned;
+    [SerializeField] protected bool stunned;
+    [SerializeField] protected float timerStunned = 0;
+    [SerializeField] protected float maxTimerStunned;
 
-    private void Start() {
-        objective = FindObjectOfType<FPSController>().gameObject;
-        
+    [Header("Attack Things")]
+    [SerializeField] protected float distanceToAttack;
+    [SerializeField] protected float timerAttack = 0;
+    [SerializeField] protected float timeToPrepareAttack;
+    [SerializeField] protected float damage;
+    [SerializeField] protected bool isAtacking;
+
+    [Header("Health Things")]
+    [SerializeField] HPController hpController;
+    RaycastHit hit;
+    private void Awake() {
+        navMeshAgent.updateRotation = false;
+    }
+    protected virtual void Start() {
+        objective = GameObject.FindGameObjectWithTag("Player");
+
         navMeshAgent.speed = speed;
         navMeshAgent.acceleration = acceleration;
+
+        timerAttack = 0;
     }
 
-    private void Update() {
+    protected virtual void Update() {
         if (stunned) {
-               
-            
             timerStunned += Time.deltaTime;
-            if(timerStunned >= maxTimerStunned) {
+            if (timerStunned >= maxTimerStunned) {
                 timerStunned = 0;
                 stunned = false;
                 navMeshAgent.isStopped = false;
             }
+            return;
         }
 
+        Physics.Raycast(transform.position, (objective.transform.position - transform.position), out hit, distanceToAttack);
+        if (Vector3.Distance(transform.position, objective.transform.position) <= distanceToAttack && hit.transform.gameObject == objective) {
+            navMeshAgent.isStopped = true;
+            timerAttack += Time.deltaTime;
+            if (timerAttack >= timeToPrepareAttack)
+                Attack();
+        }
+        else {
+            navMeshAgent.isStopped = false;
+            timerAttack = 0;
+        }
     }
 
-    private void FixedUpdate() {
+    protected virtual void FixedUpdate() {
         navMeshAgent.SetDestination(objective.transform.position);
     }
+    private void LateUpdate() {
+        transform.rotation = Quaternion.LookRotation((objective.transform.position - transform.position).normalized);
+    }
+    protected virtual void Attack() {
+        timerAttack = 0;
+        if (Physics.Raycast(transform.position, (objective.transform.position - transform.position), out hit, distanceToAttack))
+            if (hit.transform.gameObject == objective)
+                if (hit.transform.GetComponent<IHittable>() != null) 
+                    hit.transform.GetComponent<IHittable>().Hit(damage);
+    }
 
-    public void Hit(float damage) {
-        Debug.Log("AAAAAA LA OCNCHA DE LA LORA");
-
-        health -= damage;
-        if(health <= 0) {
-            health = 0;
+    public virtual void Hit(float damage) {
+        hpController.TakeDamage((int)damage);
+        if (hpController.GetHP() <= 0) {
             Destroy(this.gameObject);
         }
     }
 
-    public void HitWithStun(float damage, float stunDuration) {
+    public virtual void HitWithStun(float damage, float stunDuration) {
         stunned = true;
         maxTimerStunned = stunDuration;
-            navMeshAgent.isStopped = true;
+        navMeshAgent.isStopped = true;
         navMeshAgent.velocity = Vector3.zero;
-       
+
         Hit(damage);
     }
 }
