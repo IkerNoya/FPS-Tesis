@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class Pistol : Weapon
 {
-        RaycastHit hit;
-        Vector3 mousePos;
-        Ray ray;
+    RaycastHit hit;
+    Vector3 mousePos;
+    Ray ray;
     void Start()
     {
         currentAmmo = ammo;
     }
+
     void Update()
     {
         mousePos = Input.mousePosition;
@@ -23,7 +24,8 @@ public class Pistol : Weapon
         }
         if(Input.GetKeyDown(KeyCode.R) && currentAmmo < ammo && !isReloading)
         {
-            StartCoroutine(Reload(reloadSpeed));
+            if(canReload)
+                StartCoroutine(Reload(reloadSpeed));
         }
         shootTimer -= Time.deltaTime;
     }
@@ -34,7 +36,14 @@ public class Pistol : Weapon
             Debug.Log(hit.collider.tag);
             if (hit.collider.CompareTag("Enemy")) {
                 Debug.Log("ASD");
-                hit.collider.GetComponent<IHittable>().HitWithStun(damage, stunDuration);
+                if (hit.collider.GetComponent<IHittable>() != null) 
+                {
+                    hit.collider.GetComponent<IHittable>().HitWithStun(damage, stunDuration);
+                }
+                else
+                {
+                    hit.collider.gameObject.GetComponent<Rigidbody>().AddForce((hit.point - transform.position) * 30);
+                }
             }
         }
 

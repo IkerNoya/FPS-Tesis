@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+
     [SerializeField] protected Camera cam;
     [SerializeField] protected MouseLook mouseLook;
 
@@ -29,6 +30,11 @@ public class Weapon : MonoBehaviour
     protected bool canShoot = true;
 
     [SerializeField] protected float stunDuration;
+    protected bool canReload = true;
+    void Awake()
+    {
+        Player.Died += PlayerDied;
+    }
     protected virtual void Shoot()
     {
         RaycastHit hit;
@@ -56,6 +62,11 @@ public class Weapon : MonoBehaviour
         isReloading = false;
         yield return null;
     }
+    void PlayerDied(Player player)
+    {
+        canReload = false;
+        canShoot = false;
+    }
     public int GetMaxAmmo()
     {
         return ammo;
@@ -67,5 +78,9 @@ public class Weapon : MonoBehaviour
     public void CanShootAfterSpawn()
     {
         canShoot = true;
+    }
+    void OnDestroy()
+    {
+        Player.Died -= PlayerDied;
     }
 }

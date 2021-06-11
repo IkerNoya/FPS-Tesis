@@ -8,17 +8,23 @@ public class MouseLook : MonoBehaviour
     [SerializeField] float horizontalSensitivity;
     [SerializeField] Transform body;
 
+    HPController hpController;
+
     float xRotation = 0;
     float verticalRecoil = 0;
     float horizontalRecoil = 0;
 
     void Start()
     {
+        hpController = GetComponentInParent<HPController>();
         Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
     {
+        if (!hpController.GetIsAlive() && hpController != null)
+            return;
+
         float mouseX = horizontalRecoil + Input.GetAxis("Mouse X") * horizontalSensitivity * Time.deltaTime;
         float mouseY = verticalRecoil + Input.GetAxis("Mouse Y") * verticalSensitivity * Time.deltaTime;
         //restart recoil after 1 frame

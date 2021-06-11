@@ -24,6 +24,7 @@ public class FPSController : MonoBehaviour
     [SerializeField] LayerMask groundMask;
 
     CharacterController controller;
+    HPController hpController;
 
     float gravity = -9.81f * 2;
     float yNegativeVelocity = -2;
@@ -42,11 +43,15 @@ public class FPSController : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        hpController = GetComponent<HPController>();
         cam = Camera.main.transform;
     }
 
     void Update()
     {
+        if (!hpController.GetIsAlive() && hpController != null)
+            return;
+
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if(isGrounded && velocity.y < 0)
@@ -101,10 +106,10 @@ public class FPSController : MonoBehaviour
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity); // jump formula: result = sqrt( h * -2 * g)
 
 
-#if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.Escape))
-            UnityEditor.EditorApplication.isPlaying = false;
-#endif 
+//#if UNITY_EDITOR
+//        if (Input.GetKeyDown(KeyCode.Escape))
+//            UnityEditor.EditorApplication.isPlaying = false;
+//#endif 
     }
     void Movement()
     {
