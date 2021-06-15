@@ -33,7 +33,6 @@ public class Pistol : Weapon
     protected override void Shoot() {
 
         if (Physics.Raycast(ray, out hit, range)) {
-            Debug.Log(hit.collider.tag);
             if (hit.collider.CompareTag("Enemy")) {
                 if (hit.collider.GetComponent<IHittable>() != null) 
                 {

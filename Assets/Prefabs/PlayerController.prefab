@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 323569825}
-  - component: {fileID: 323569827}
+  - component: {fileID: 1945566207527336892}
   m_Layer: 9
   m_Name: Granade Launcher
   m_TagString: Untagged
@@ -31,7 +31,7 @@ Transform:
   m_Father: {fileID: 3680331119627920082}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &323569827
+--- !u!114 &1945566207527336892
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,7 +40,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 323569824}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e2e5dece4793514fa8b634179f61f4d, type: 3}
+  m_Script: {fileID: 11500000, guid: 697b1ac10f373f445a0e51b3450f5d43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 3680331119627920089}
@@ -50,12 +50,15 @@ MonoBehaviour:
   damage: 100
   verticalRecoil: 1
   horizontalRecoil: 0
-  range: 40
+  range: 1000
   reloadSpeed: 3
   muzzleFlash: {fileID: 0}
-  hitParticle: {fileID: 0}
+  hitParticle: {fileID: 198917022394846920, guid: e1b08032bec16ba4eb1ae23cbd572664,
+    type: 3}
   enemyHitParticle: {fileID: 0}
-  stunDuration: 0
+  stunDuration: 2
+  granade: {fileID: 8278043907329323362, guid: 99c48ed4eceb7af498d7b868d5ae15b0, type: 3}
+  force: 2000
 --- !u!1 &753030334
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,7 +112,8 @@ MonoBehaviour:
   range: 40
   reloadSpeed: 3
   muzzleFlash: {fileID: 0}
-  hitParticle: {fileID: 0}
+  hitParticle: {fileID: 885583209112628587, guid: 7fd851cd68afcc14b98c6628be416315,
+    type: 3}
   enemyHitParticle: {fileID: 0}
   stunDuration: 0
 --- !u!1 &1014023008
@@ -165,7 +169,8 @@ MonoBehaviour:
   range: 40
   reloadSpeed: 3
   muzzleFlash: {fileID: 0}
-  hitParticle: {fileID: 0}
+  hitParticle: {fileID: 885583209112628587, guid: 7fd851cd68afcc14b98c6628be416315,
+    type: 3}
   enemyHitParticle: {fileID: 0}
   stunDuration: 0.5
 --- !u!1 &1465297648
@@ -213,7 +218,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 3680331119627920089}
   mouseLook: {fileID: 3680331119627920093}
-  ammo: 12
+  ammo: 30
   fireRate: 0.16
   damage: 30
   verticalRecoil: 1.5
@@ -221,7 +226,8 @@ MonoBehaviour:
   range: 40
   reloadSpeed: 3
   muzzleFlash: {fileID: 0}
-  hitParticle: {fileID: 0}
+  hitParticle: {fileID: 885583209112628587, guid: 7fd851cd68afcc14b98c6628be416315,
+    type: 3}
   enemyHitParticle: {fileID: 0}
   stunDuration: 0
 --- !u!1 &1087635708991400299
@@ -538,7 +544,8 @@ MonoBehaviour:
   range: 40
   reloadSpeed: 3
   muzzleFlash: {fileID: 0}
-  hitParticle: {fileID: 0}
+  hitParticle: {fileID: 885583209112628587, guid: 7fd851cd68afcc14b98c6628be416315,
+    type: 3}
   enemyHitParticle: {fileID: 0}
   stunDuration: 0.5
 --- !u!1 &5809497204448586619
@@ -746,7 +753,7 @@ MonoBehaviour:
   - {fileID: 1014023010}
   - {fileID: 753030337}
   - {fileID: 1465297651}
-  - {fileID: 323569827}
+  - {fileID: 1945566207527336892}
 --- !u!114 &6380721928975121257
 MonoBehaviour:
   m_ObjectHideFlags: 0

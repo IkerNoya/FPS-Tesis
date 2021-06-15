@@ -5,7 +5,7 @@ using UnityEngine;
 public class GranadeLauncher : Weapon
 {
     [SerializeField] GameObject granade;
-    [SerializeField] float force;
+    [SerializeField] float granadeSpeed;
 
     RaycastHit hit;
     Vector3 mousePos;
@@ -39,9 +39,13 @@ public class GranadeLauncher : Weapon
         Vector3 mousePos = Input.mousePosition;
         Ray ray = cam.ScreenPointToRay(mousePos);
 
-        GameObject go = Instantiate(granade, transform.position, Quaternion.identity);
-        go.GetComponent<Granade>().SetDirection(ray.direction);
-        go.GetComponent<Granade>().SetForce(force);
+        GameObject go = Instantiate(this.granade, shootingPoint.position, Quaternion.identity);
+        Granade granade = go.GetComponent<Granade>();
+        if (granade != null)
+        {
+            granade.Initialize(shootingPoint, granadeSpeed, 9.8f);
+            Destroy(go, 5);
+        }
 
         currentAmmo--;
         shootTimer = fireRate;

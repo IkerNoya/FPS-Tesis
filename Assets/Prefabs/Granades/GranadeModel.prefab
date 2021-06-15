@@ -233,6 +233,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c410290d55b9c74395f0b7d6b34886f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 250
+  damageRadius: 10
+  mass: 2
+  Velocity: 360
+  gravity: 9.8
+  lifeTime: 5
   granade: {fileID: 5475387769402972213}
   explotion: {fileID: 3093314408508903235}
 --- !u!135 &4796940503222988977

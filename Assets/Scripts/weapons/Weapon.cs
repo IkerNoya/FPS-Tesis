@@ -22,6 +22,8 @@ public class Weapon : MonoBehaviour
     [SerializeField] protected GameObject hitParticle;
     [SerializeField] protected ParticleSystem enemyHitParticle;
 
+    [SerializeField] protected Transform shootingPoint;
+
     protected float shootTimer = 0;
 
     protected int currentAmmo;
