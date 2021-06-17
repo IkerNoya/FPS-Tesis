@@ -23,6 +23,7 @@ public class Player : MonoBehaviour, IHittable
 
     float timer;
     float waitForHpRegen = 5f;
+
     bool canSwitchWeapons = true;
 
     void Start()
