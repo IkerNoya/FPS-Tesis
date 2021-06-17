@@ -599,7 +599,7 @@ GameObject:
   - component: {fileID: 617912844}
   m_Layer: 10
   m_Name: miniEnemy (2)
-  m_TagString: Enemy
+  m_TagString: Pickable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -961,7 +961,7 @@ GameObject:
   - component: {fileID: 1499408981}
   m_Layer: 10
   m_Name: miniEnemy
-  m_TagString: Enemy
+  m_TagString: Pickable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1071,7 +1071,7 @@ GameObject:
   - component: {fileID: 1713715408}
   m_Layer: 10
   m_Name: miniEnemy (1)
-  m_TagString: Enemy
+  m_TagString: Pickable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

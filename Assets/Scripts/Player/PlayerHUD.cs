@@ -25,4 +25,9 @@ public class PlayerHUD : MonoBehaviour
         if (player != null)
             ammo.text = player.GetWeapons()[(int)player.GetWeaponMode()].GetCurrentAmmo().ToString() + " / " + player.GetWeapons()[(int)player.GetWeaponMode()].GetMaxAmmo().ToString();
     }
+
+    public void OnClickWeapon(int weapon)
+    {
+        player.SetWeapon((Player.WeaponMode)weapon);
+    }
 }

@@ -10,10 +10,11 @@ public class Player : MonoBehaviour, IHittable
         Pistol, SMG, Shotgun, Rifle, GranadeLauncher
     }
 
+    [SerializeField] GameObject weaponWheel;
     [SerializeField] WeaponMode equipedWeapon;
     [SerializeField] List<GameObject> weapons;
     [SerializeField] List<Weapon> weaponsScript;
-
+    [SerializeField] MouseLook cameraMovement;
     HPController hpController;
 
     public static event Action<Player> Died;
@@ -25,6 +26,7 @@ public class Player : MonoBehaviour, IHittable
     float waitForHpRegen = 5f;
 
     bool canSwitchWeapons = true;
+    bool isWeaponWheelActivated = false;
 
     void Start()
     {
@@ -33,6 +35,10 @@ public class Player : MonoBehaviour, IHittable
             weapons[i].SetActive(false);
 
         weapons[(int)equipedWeapon].SetActive(true);
+
+        if(weaponWheel)
+            weaponWheel.SetActive(false);
+
     }
 
     void Update()
@@ -64,41 +70,61 @@ public class Player : MonoBehaviour, IHittable
                 }
             }
         }
-
         Inputs();
-    }
-
-    void SetWeapon()
-    {
-        StartCoroutine(WeaponSwitch());
+        ActivateWeaponWheel();
     }
     void Inputs()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1) && canSwitchWeapons)
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            equipedWeapon = WeaponMode.Pistol;
-            SetWeapon();
+            SetWeapon(WeaponMode.Pistol);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha2) && canSwitchWeapons)
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            equipedWeapon = WeaponMode.SMG;
-            SetWeapon();    
+            SetWeapon(WeaponMode.SMG);    
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha3) && canSwitchWeapons)
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            equipedWeapon = WeaponMode.Shotgun;
-            SetWeapon();
+            SetWeapon(WeaponMode.Shotgun);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha4) && canSwitchWeapons)
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            equipedWeapon = WeaponMode.Rifle;
-            SetWeapon();
+            SetWeapon(WeaponMode.Rifle);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha5) && canSwitchWeapons)
+        else if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            equipedWeapon = WeaponMode.GranadeLauncher;
-            SetWeapon();
+            SetWeapon(WeaponMode.GranadeLauncher);
         }
+
+        if (Input.GetKey(KeyCode.Tab))
+        {
+            isWeaponWheelActivated = true;
+        }
+        else if (Input.GetKeyUp(KeyCode.Tab))
+        {
+            isWeaponWheelActivated = false;
+            Time.timeScale = 1;
+            if (weaponWheel)
+                weaponWheel.SetActive(false);
+
+            Cursor.lockState = CursorLockMode.Locked;
+            if(canSwitchWeapons)
+                weaponsScript[(int)equipedWeapon].setCanShoot(true);
+
+            cameraMovement.SetCanMoveCamera(true);
+        }
+    }
+
+    void ActivateWeaponWheel()
+    {
+        if (weaponWheel == null || !isWeaponWheelActivated)
+            return;
+
+        Time.timeScale = 0.5f;
+        weaponWheel.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        weaponsScript[(int)equipedWeapon].setCanShoot(false);
+        cameraMovement.SetCanMoveCamera(false);
     }
 
     public WeaponMode GetWeaponMode()
@@ -122,10 +148,6 @@ public class Player : MonoBehaviour, IHittable
             TakeDamage?.Invoke(this);
         }
         timer = 0;
-    }
-    public void HitWithStun(float damage, float stunDuration)
-    {
-        //NADA 
     }
 
     void OnTriggerEnter(Collider other)
@@ -158,4 +180,18 @@ public class Player : MonoBehaviour, IHittable
         canSwitchWeapons = true;
         yield return null;
     }
+
+    public void SetWeapon(WeaponMode mode)
+    {
+        if (!canSwitchWeapons)
+            return;
+
+        equipedWeapon = mode;
+        StartCoroutine(WeaponSwitch());
+    }
+    public void HitWithStun(float damage, float stunDuration)
+    {
+        //NADA 
+    }
+
 }
