@@ -23,17 +23,19 @@ public class Player : MonoBehaviour, IHittable
 
     float timer;
     float waitForHpRegen = 5f;
-    
+    bool canSwitchWeapons = true;
 
     void Start()
     {
         hpController = GetComponent<HPController>();
-        SetWeapon();
+        for (int i = 0; i < weapons.Count; i++)
+            weapons[i].SetActive(false);
+
+        weapons[(int)equipedWeapon].SetActive(true);
     }
 
     void Update()
     {
-        
         if (!hpController.GetIsAlive() && hpController != null)
             return;
 
@@ -67,34 +69,31 @@ public class Player : MonoBehaviour, IHittable
 
     void SetWeapon()
     {
-        for (int i = 0; i < weapons.Count; i++)
-            weapons[i].SetActive(false);
-
-        weapons[(int)equipedWeapon].SetActive(true);
+        StartCoroutine(WeaponSwitch());
     }
     void Inputs()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1) && canSwitchWeapons)
         {
             equipedWeapon = WeaponMode.Pistol;
             SetWeapon();
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        else if (Input.GetKeyDown(KeyCode.Alpha2) && canSwitchWeapons)
         {
             equipedWeapon = WeaponMode.SMG;
-            SetWeapon();
+            SetWeapon();    
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        else if (Input.GetKeyDown(KeyCode.Alpha3) && canSwitchWeapons)
         {
             equipedWeapon = WeaponMode.Shotgun;
             SetWeapon();
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        else if (Input.GetKeyDown(KeyCode.Alpha4) && canSwitchWeapons)
         {
             equipedWeapon = WeaponMode.Rifle;
             SetWeapon();
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha5))
+        else if (Input.GetKeyDown(KeyCode.Alpha5) && canSwitchWeapons)
         {
             equipedWeapon = WeaponMode.GranadeLauncher;
             SetWeapon();
@@ -134,5 +133,28 @@ public class Player : MonoBehaviour, IHittable
         {
             Hit(damageTaken);
         }
+    }
+
+    IEnumerator WeaponSwitch()
+    {
+        canSwitchWeapons = false;
+        for (int i = 0; i < weapons.Count; i++)
+        {
+            if(i == (int)equipedWeapon)
+            {
+                weaponsScript[i].setCanShoot(false);
+                weapons[i].GetComponent<Animator>().SetTrigger("WeaponChange");
+                yield return new WaitForSeconds(1);
+            }
+            weapons[i].SetActive(false);
+        }
+
+        weaponsScript[(int)equipedWeapon].setCanShoot(false);
+        weapons[(int)equipedWeapon].SetActive(true);
+        weapons[(int)equipedWeapon].GetComponent<Animator>().SetTrigger("WeaponEquip");
+        yield return new WaitForSeconds(1);
+        weaponsScript[(int)equipedWeapon].setCanShoot(true);
+        canSwitchWeapons = true;
+        yield return null;
     }
 }
