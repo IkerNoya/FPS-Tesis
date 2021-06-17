@@ -22,7 +22,8 @@ public class Weapon : MonoBehaviour
     [SerializeField] protected GameObject hitParticle;
     [SerializeField] protected ParticleSystem enemyHitParticle;
 
-    [SerializeField] protected Transform shootingPoint;
+    [SerializeField] protected Transform shootingPoint; 
+    [SerializeField] protected float stunDuration;
 
     protected float shootTimer = 0;
 
@@ -31,7 +32,6 @@ public class Weapon : MonoBehaviour
     protected bool isReloading = false;
     protected bool canShoot = true;
 
-    [SerializeField] protected float stunDuration;
     protected bool canReload = true;
     void Awake()
     {
@@ -73,6 +73,7 @@ public class Weapon : MonoBehaviour
     {
         return ammo;
     }
+    
     public int GetCurrentAmmo()
     {
         return currentAmmo;
@@ -81,6 +82,15 @@ public class Weapon : MonoBehaviour
     {
         canShoot = true;
     }
+    public void setCanShoot(bool value)
+    {
+        canShoot = value;
+    }
+    public bool getCanShoot()
+    {
+        return canShoot;
+    }
+
     void OnDestroy()
     {
         Player.Died -= PlayerDied;
