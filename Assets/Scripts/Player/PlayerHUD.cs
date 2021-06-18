@@ -2,32 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using System;
 public class PlayerHUD : MonoBehaviour
 {
-    HPController hpController;
-    Player player;
+    [SerializeField] Text hpText;
+    [SerializeField] Text ammoText;
 
-    public Text healthPoints;
-    public Text ammo;
+    public static event Action<int> ClickedWeapon;
 
-
-    void Start()
-    {
-        hpController = GetComponent<HPController>();
-        player = GetComponent<Player>();
+    public void ChangeHPText(float hp) {
+        hpText.text = "HP: " + hp;
     }
-
-    void Update()
-    {
-        if(healthPoints!=null)
-            healthPoints.text = "HP: " + ((int)hpController.GetHP()).ToString();
-        if (player != null)
-            ammo.text = player.GetWeapons()[(int)player.GetWeaponMode()].GetCurrentAmmo().ToString() + " / " + player.GetWeapons()[(int)player.GetWeaponMode()].GetMaxAmmo().ToString();
+    public void ChangeAmmoText(int actualAmmo, int totalAmmo) {
+        ammoText.text = actualAmmo + " / " + totalAmmo;
     }
 
     public void OnClickWeapon(int weapon)
     {
-        player.SetWeapon((Player.WeaponMode)weapon);
+        if (ClickedWeapon != null)
+            ClickedWeapon(weapon);
     }
 }

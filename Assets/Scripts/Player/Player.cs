@@ -12,10 +12,10 @@ public class Player : MonoBehaviour, IHittable
 
     [SerializeField] GameObject weaponWheel;
     [SerializeField] WeaponMode equipedWeapon;
-    [SerializeField] List<GameObject> weapons;
-    [SerializeField] List<Weapon> weaponsScript;
+    [SerializeField] List<Weapon> weapons;
     [SerializeField] MouseLook cameraMovement;
-    HPController hpController;
+    [SerializeField] HPController hpController;
+    [SerializeField] PlayerHUD hud;
 
     public static event Action<Player> Died;
     public static event Action<Player> TakeDamage;
@@ -30,20 +30,29 @@ public class Player : MonoBehaviour, IHittable
 
     void Start()
     {
-        hpController = GetComponent<HPController>();
         for (int i = 0; i < weapons.Count; i++)
-            weapons[i].SetActive(false);
+            weapons[i].gameObject.SetActive(false);
 
-        weapons[(int)equipedWeapon].SetActive(true);
+        weapons[(int)equipedWeapon].gameObject.SetActive(true);
 
         if(weaponWheel)
             weaponWheel.SetActive(false);
 
+        Weapon.WeaponShooted += AmmoChanged;
+        PlayerHUD.ClickedWeapon += SetWeapon;
+
+        ChangedHP(hpController.GetHP());
+        AmmoChanged(weapons[(int)equipedWeapon].GetCurrentAmmo(), weapons[(int)equipedWeapon].GetMaxAmmo());
+    }
+
+    private void OnDisable() {
+        Weapon.WeaponShooted -= AmmoChanged;
+        PlayerHUD.ClickedWeapon -= SetWeapon;
     }
 
     void Update()
     {
-        if (!hpController.GetIsAlive() && hpController != null)
+        if (!hpController.GetIsAlive())
             return;
 
         if (Input.GetKeyDown(KeyCode.KeypadEnter))
@@ -109,10 +118,16 @@ public class Player : MonoBehaviour, IHittable
 
             Cursor.lockState = CursorLockMode.Locked;
             if(canSwitchWeapons)
-                weaponsScript[(int)equipedWeapon].setCanShoot(true);
+                weapons[(int)equipedWeapon].SetCanShoot(true);
 
             cameraMovement.SetCanMoveCamera(true);
         }
+
+        if (Input.GetButton("Fire1")) 
+            weapons[(int)equipedWeapon].Shoot();
+        if (Input.GetKeyDown(KeyCode.R))
+            weapons[(int)equipedWeapon].Reload();
+
     }
 
     void ActivateWeaponWheel()
@@ -123,7 +138,7 @@ public class Player : MonoBehaviour, IHittable
         Time.timeScale = 0.5f;
         weaponWheel.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
-        weaponsScript[(int)equipedWeapon].setCanShoot(false);
+        weapons[(int)equipedWeapon].SetCanShoot(false);
         cameraMovement.SetCanMoveCamera(false);
     }
 
@@ -134,7 +149,7 @@ public class Player : MonoBehaviour, IHittable
 
     public List<Weapon> GetWeapons()
     {
-        return weaponsScript;
+        return weapons;
     }
 
     public void Hit(float damage)
@@ -146,6 +161,7 @@ public class Player : MonoBehaviour, IHittable
             if (hpController.GetHP() <= 0)
                 Died?.Invoke(this);
             TakeDamage?.Invoke(this);
+            ChangedHP(hpController.GetHP());
         }
         timer = 0;
     }
@@ -165,29 +181,40 @@ public class Player : MonoBehaviour, IHittable
         {
             if(i == (int)equipedWeapon)
             {
-                weaponsScript[i].setCanShoot(false);
+                weapons[i].SetCanShoot(false);
                 weapons[i].GetComponent<Animator>().SetTrigger("WeaponChange");
                 yield return new WaitForSeconds(1);
             }
-            weapons[i].SetActive(false);
+            weapons[i].gameObject.SetActive(false);
         }
 
-        weaponsScript[(int)equipedWeapon].setCanShoot(false);
-        weapons[(int)equipedWeapon].SetActive(true);
+        weapons[(int)equipedWeapon].SetCanShoot(false);
+        weapons[(int)equipedWeapon].gameObject.SetActive(true);
         weapons[(int)equipedWeapon].GetComponent<Animator>().SetTrigger("WeaponEquip");
         yield return new WaitForSeconds(1);
-        weaponsScript[(int)equipedWeapon].setCanShoot(true);
+        weapons[(int)equipedWeapon].SetCanShoot(true);
         canSwitchWeapons = true;
         yield return null;
     }
-
+    
     public void SetWeapon(WeaponMode mode)
     {
         if (!canSwitchWeapons)
             return;
 
         equipedWeapon = mode;
+        AmmoChanged(weapons[(int)equipedWeapon].GetCurrentAmmo(), weapons[(int)equipedWeapon].GetMaxAmmo());
         StartCoroutine(WeaponSwitch());
+    }
+
+    void SetWeapon(int mode) {
+        SetWeapon((WeaponMode)mode);
+    }
+    void AmmoChanged(int actualAmmo, int maxAmmo) {
+        hud.ChangeAmmoText(actualAmmo, maxAmmo);
+    }
+    void ChangedHP(float actualHP) {
+        hud.ChangeHPText(actualHP);
     }
     public void HitWithStun(float damage, float stunDuration)
     {

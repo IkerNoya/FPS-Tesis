@@ -11,14 +11,14 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        Player.Died += EndGame;
         EnemySpawner.EndGame += EndGame;
     }
 
-    void Update()
-    {
-        
+    void EndGame(Player p) {
+        Cursor.lockState = CursorLockMode.None;
+        SceneManager.LoadScene("LoseScreen");
     }
-
     void EndGame(EnemySpawner es)
     {
         Cursor.lockState = CursorLockMode.None;
@@ -28,5 +28,6 @@ public class GameManager : MonoBehaviour
     void OnDisable()
     {
         EnemySpawner.EndGame -= EndGame;
+        Player.Died -= EndGame;
     }
 }
