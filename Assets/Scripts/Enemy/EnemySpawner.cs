@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,9 +12,14 @@ public class EnemySpawner : MonoBehaviour {
     [SerializeField] int maxCantOfEnemiesToSpawn;
     [SerializeField] int enemiesToCreateForIteration;
     [SerializeField] Transform enemiesParent;
+
+    public static event Action<EnemySpawner> EndGame;
+
     void Update() {
-        if (enemiesCreated >= maxCantOfEnemiesToSpawn)
+        if (enemiesCreated >= maxCantOfEnemiesToSpawn){
+            EndGame?.Invoke(this);
             return;
+        }
 
         timerToSpawn += Time.deltaTime;
         if(timerToSpawn >= timeBetweenSpawns) {
@@ -24,8 +30,8 @@ public class EnemySpawner : MonoBehaviour {
                 if (enemiesCreated >= maxCantOfEnemiesToSpawn)
                     break;
 
-                int randomPosition = Random.Range(0, spawnerPositionsAux.Count);
-                Enemy e = Instantiate(enemiesPrefabs[Random.Range(0, enemiesPrefabs.Count)], spawnerPositionsAux[randomPosition].position, Quaternion.identity, enemiesParent);
+                int randomPosition = UnityEngine.Random.Range(0, spawnerPositionsAux.Count);
+                Enemy e = Instantiate(enemiesPrefabs[UnityEngine.Random.Range(0, enemiesPrefabs.Count)], spawnerPositionsAux[randomPosition].position, Quaternion.identity, enemiesParent);
 
                 spawnerPositionsAux.RemoveAt(randomPosition);
                 enemiesCreated++;
