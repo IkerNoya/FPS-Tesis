@@ -17,16 +17,6 @@ public class HPController : MonoBehaviour
     {
         hp = maxHP;
     }
-
-    void Update()
-    {
-        if (hp >= 0)
-            return;
-
-        isAlive = false;
-        hp = 0;
-    }
-
     public void RegenerateHP(int regenAmmount)
     {
         if (hp < maxHP)
@@ -63,6 +53,11 @@ public class HPController : MonoBehaviour
     {
         hp -= value;
         canHeal = false;
+
+        if(hp <= 0) {
+            hp = 0;
+            isAlive = false;
+        }
     }
 
 }
