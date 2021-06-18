@@ -17,9 +17,6 @@ public class DistanceEnemy : Enemy {
     protected override void FixedUpdate() {
         base.FixedUpdate();
     }
-    protected override void LateUpdate() {
-        base.LateUpdate();
-    }
     protected override void Attack() {
         timerAttack = 0;
         if (Physics.Raycast(transform.position, (objective.transform.position - transform.position), out hit, distanceToAttack))
