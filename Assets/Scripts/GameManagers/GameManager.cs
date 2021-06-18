@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
 
-
     float timer = 0;
     float endGameTimer = 1.5f;
 
@@ -22,7 +21,7 @@ public class GameManager : MonoBehaviour
 
     void EndGame(EnemySpawner es)
     {
-        SceneManager.LoadScene("VictoryScreen");
+    
     }
 
     void OnDisable()
