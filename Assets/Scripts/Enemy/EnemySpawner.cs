@@ -20,7 +20,6 @@ public class EnemySpawner : MonoBehaviour {
             timerToSpawn = 0;
 
             List<Transform> spawnerPositionsAux = new List<Transform>(spawnerPositions);
-
             for (int i = 0; i < enemiesToCreateForIteration; i++) {
                 if (enemiesCreated >= maxCantOfEnemiesToSpawn)
                     break;
