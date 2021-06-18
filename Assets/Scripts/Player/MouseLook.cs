@@ -13,6 +13,7 @@ public class MouseLook : MonoBehaviour
     float xRotation = 0;
     float verticalRecoil = 0;
     float horizontalRecoil = 0;
+    bool canMoveCamera = true;
 
     void Start()
     {
@@ -22,7 +23,7 @@ public class MouseLook : MonoBehaviour
 
     void Update()
     {
-        if (!hpController.GetIsAlive() && hpController != null)
+        if ((!hpController.GetIsAlive() && hpController != null) || !canMoveCamera)
             return;
 
         float mouseX = horizontalRecoil + Input.GetAxis("Mouse X") * horizontalSensitivity * Time.deltaTime;
@@ -42,5 +43,9 @@ public class MouseLook : MonoBehaviour
     {
         verticalRecoil += vertical;
         horizontalRecoil += horizontal;
+    }
+    public void SetCanMoveCamera(bool value)
+    {
+        canMoveCamera = value;
     }
 }
