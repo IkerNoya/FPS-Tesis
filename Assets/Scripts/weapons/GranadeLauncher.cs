@@ -7,35 +7,25 @@ public class GranadeLauncher : Weapon
     [SerializeField] GameObject granade;
     [SerializeField] float granadeSpeed;
 
-    RaycastHit hit;
-    Vector3 mousePos;
-    Ray ray;
-
-    void Start()
+    protected override void Start()
     {
-        currentAmmo = ammo;
+        base.Start();
     }
 
-    void Update()
+    protected override void Update()
     {
-        mousePos = Input.mousePosition;
-        ray = cam.ScreenPointToRay(mousePos);
-        Debug.DrawRay(transform.position, ray.direction * range, Color.magenta);
-        if (Input.GetButtonDown("Fire1") && canShoot && shootTimer <= 0 && currentAmmo > 0)
-        {
-            Shoot();
-            mouseLook.AddRecoil(verticalRecoil, Random.Range(-horizontalRecoil, horizontalRecoil));
-        }
-        if (Input.GetKeyDown(KeyCode.R) && currentAmmo < ammo && !isReloading)
-        {
-            if (canReload)
-                StartCoroutine(Reload(reloadSpeed));
-        }
-        shootTimer -= Time.deltaTime;
+        base.Update();
+    }
+    public override void Reload() {
+        base.Reload();
     }
 
-    protected override void Shoot()
+    public override void Shoot()
     {
+        if (!canShoot || shootTimer > 0 || currentAmmo <= 0)
+            return;
+
+        mouseLook.AddRecoil(verticalRecoil, Random.Range(-horizontalRecoil, horizontalRecoil));
         Vector3 mousePos = Input.mousePosition;
         Ray ray = cam.ScreenPointToRay(mousePos);
 
@@ -49,5 +39,7 @@ public class GranadeLauncher : Weapon
 
         currentAmmo--;
         shootTimer = fireRate;
+
+        AmmoChanged();
     }
 }

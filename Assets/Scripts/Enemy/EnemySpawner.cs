@@ -11,6 +11,7 @@ public class EnemySpawner : MonoBehaviour {
     [SerializeField] int maxCantOfEnemiesToSpawn;
     [SerializeField] int enemiesToCreateForIteration;
     [SerializeField] Transform enemiesParent;
+
     void Update() {
         if (enemiesCreated >= maxCantOfEnemiesToSpawn)
             return;
@@ -27,7 +28,6 @@ public class EnemySpawner : MonoBehaviour {
 
                 int randomPosition = Random.Range(0, spawnerPositionsAux.Count);
                 Enemy e = Instantiate(enemiesPrefabs[Random.Range(0, enemiesPrefabs.Count)], spawnerPositionsAux[randomPosition].position, Quaternion.identity, enemiesParent);
-
                 spawnerPositionsAux.RemoveAt(randomPosition);
                 enemiesCreated++;
             }

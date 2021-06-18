@@ -12,6 +12,7 @@ public class HPController : MonoBehaviour
 
     bool isAlive=true;
     bool canHeal = false;
+
     void Start()
     {
         hp = maxHP;

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Weapon : MonoBehaviour
 {
@@ -33,11 +34,29 @@ public class Weapon : MonoBehaviour
     protected bool canShoot = true;
 
     protected bool canReload = true;
+
+    protected RaycastHit hit;
+    protected Vector3 mousePos;
+    protected Ray ray;
+
+    public static event Action<int, int> WeaponShooted;
+
     void Awake()
     {
         Player.Died += PlayerDied;
     }
-    protected virtual void Shoot()
+
+    protected virtual void Start() {
+        currentAmmo = ammo;
+    }
+
+    protected virtual void Update() {
+        mousePos = Input.mousePosition;
+        ray = cam.ScreenPointToRay(mousePos);
+        Debug.DrawRay(transform.position, ray.direction * range, Color.magenta);
+        shootTimer -= Time.deltaTime;
+    }
+    public virtual void Shoot()
     {
         RaycastHit hit;
         Vector3 mousePos = Input.mousePosition;
@@ -53,6 +72,16 @@ public class Weapon : MonoBehaviour
 
         currentAmmo--;
         shootTimer = fireRate;
+
+        AmmoChanged();
+    }
+    protected void AmmoChanged() {
+        if (WeaponShooted != null)
+            WeaponShooted?.Invoke(currentAmmo, ammo);
+    }
+    public virtual void Reload() {
+        if (currentAmmo < ammo && !isReloading && canReload)
+            StartCoroutine(Reload(reloadSpeed));
     }
     protected IEnumerator Reload(float timer)
     {
@@ -62,6 +91,10 @@ public class Weapon : MonoBehaviour
         currentAmmo = ammo;
         canShoot = true;
         isReloading = false;
+
+        if (WeaponShooted != null)
+            WeaponShooted?.Invoke(currentAmmo, ammo);
+
         yield return null;
     }
     void PlayerDied(Player player)
@@ -82,11 +115,11 @@ public class Weapon : MonoBehaviour
     {
         canShoot = true;
     }
-    public void setCanShoot(bool value)
+    public void SetCanShoot(bool value)
     {
         canShoot = value;
     }
-    public bool getCanShoot()
+    public bool GetCanShoot()
     {
         return canShoot;
     }
