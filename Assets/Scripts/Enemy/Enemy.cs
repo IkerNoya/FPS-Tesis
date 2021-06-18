@@ -25,9 +25,6 @@ public class Enemy : MonoBehaviour, IHittable {
     [Header("Health Things")]
     [SerializeField] HPController hpController;
     protected RaycastHit hit;
-    private void Awake() {
-        navMeshAgent.updateRotation = false;
-    }
     protected virtual void Start() {
         objective = GameObject.FindGameObjectWithTag("Player");
 
@@ -50,6 +47,7 @@ public class Enemy : MonoBehaviour, IHittable {
 
         Physics.Raycast(transform.position, (objective.transform.position - transform.position), out hit, distanceToAttack);
         if (Vector3.Distance(transform.position, objective.transform.position) <= distanceToAttack && hit.transform.gameObject == objective) {
+            transform.rotation = Quaternion.LookRotation((objective.transform.position - transform.position).normalized);
             navMeshAgent.isStopped = true;
             timerAttack += Time.deltaTime;
             if (timerAttack >= timeToPrepareAttack)
@@ -63,9 +61,6 @@ public class Enemy : MonoBehaviour, IHittable {
 
     protected virtual void FixedUpdate() {
         navMeshAgent.SetDestination(objective.transform.position);
-    }
-    protected virtual void LateUpdate() {
-        transform.rotation = Quaternion.LookRotation((objective.transform.position - transform.position).normalized);
     }
     protected virtual void Attack() {
         timerAttack = 0;
