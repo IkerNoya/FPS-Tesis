@@ -21,7 +21,8 @@ public class GameManager : MonoBehaviour
 
     void EndGame(EnemySpawner es)
     {
-    
+        Cursor.lockState = CursorLockMode.None;
+        SceneManager.LoadScene("VictoryScreen");
     }
 
     void OnDisable()
