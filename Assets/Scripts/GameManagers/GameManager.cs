@@ -5,29 +5,32 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-
-    float timer = 0;
-    float endGameTimer = 1.5f;
+    float endGameTimer = 2.0f;
 
     void Start()
     {
         Player.Died += EndGame;
-        EnemySpawner.EndGame += EndGame;
+        EnemyManager.AllEnemiesKilled += EndGame;
     }
 
-    void EndGame(Player p) {
-        Cursor.lockState = CursorLockMode.None;
-        SceneManager.LoadScene("LoseScreen");
+    void EndGame(bool winGame) {
+        if (winGame)
+            StartCoroutine(ChangeScene("VictoryScreen"));
+        else
+            StartCoroutine(ChangeScene("LoseScreen"));
     }
-    void EndGame(EnemySpawner es)
-    {
+    
+    IEnumerator ChangeScene(string scene) {
+        yield return new WaitForSeconds(endGameTimer);
+
         Cursor.lockState = CursorLockMode.None;
-        SceneManager.LoadScene("VictoryScreen");
+        SceneManager.LoadScene(scene);
+        yield return null;
     }
 
     void OnDisable()
     {
-        EnemySpawner.EndGame -= EndGame;
+        EnemyManager.AllEnemiesKilled -= EndGame;
         Player.Died -= EndGame;
     }
 }

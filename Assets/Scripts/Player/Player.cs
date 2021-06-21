@@ -17,7 +17,7 @@ public class Player : MonoBehaviour, IHittable
     [SerializeField] HPController hpController;
     [SerializeField] PlayerHUD hud;
 
-    public static event Action<Player> Died;
+    public static event Action<bool> Died;
     public static event Action<Player> TakeDamage;
 
     int damageTaken = 20;
@@ -158,8 +158,11 @@ public class Player : MonoBehaviour, IHittable
         {
             hpController.TakeDamage((int)damage);
             hpController.SetCanHeal(false);
-            if (hpController.GetHP() <= 0)
-                Died?.Invoke(this);
+            if (hpController.GetHP() <= 0) {
+                for (int i = 0; i < weapons.Count; i++)
+                    weapons[i].StopWeapon();
+                Died?.Invoke(false);
+            }
             TakeDamage?.Invoke(this);
             ChangedHP(hpController.GetHP());
         }

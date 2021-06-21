@@ -2901,6 +2901,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2056527945}
+  - component: {fileID: 2056527946}
   - component: {fileID: 2056527944}
   m_Layer: 0
   m_Name: Enemy Manager
@@ -2934,9 +2935,10 @@ MonoBehaviour:
   timeBetweenSpawns: 15
   timerToSpawn: 12
   enemiesCreated: 0
-  maxCantOfEnemiesToSpawn: 15
+  maxCantOfEnemiesToSpawn: 5
   enemiesToCreateForIteration: 5
   enemiesParent: {fileID: 1874401901}
+  canCreateEnemies: 0
 --- !u!4 &2056527945
 Transform:
   m_ObjectHideFlags: 0
@@ -2953,6 +2955,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2056527946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2056527943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e22d92bc7c631f409c01e5f1a35d3b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawner: {fileID: 2056527944}
+  enemiesAlive: []
 --- !u!1 &2081372832
 GameObject:
   m_ObjectHideFlags: 0
@@ -4391,6 +4407,11 @@ PrefabInstance:
     - target: {fileID: 8512898869019962017, guid: b21ff3a0dfca5bb48a67570255300831,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8512898869636000133, guid: b21ff3a0dfca5bb48a67570255300831,
+        type: 3}
+      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

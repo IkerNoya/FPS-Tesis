@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System;
+
 public class Enemy : MonoBehaviour, IHittable {
 
     [Header("Nav Mehs Things")]
@@ -25,6 +27,10 @@ public class Enemy : MonoBehaviour, IHittable {
     [Header("Health Things")]
     [SerializeField] HPController hpController;
     protected RaycastHit hit;
+
+    public static event Action<Enemy> Killed;
+
+
     protected virtual void Start() {
         objective = GameObject.FindGameObjectWithTag("Player");
 
@@ -73,6 +79,8 @@ public class Enemy : MonoBehaviour, IHittable {
     public virtual void Hit(float damage) {
         hpController.TakeDamage((int)damage);
         if (hpController.GetHP() <= 0) {
+            if (Killed != null)
+                Killed(this);
             Destroy(this.gameObject);
         }
     }
