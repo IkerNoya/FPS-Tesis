@@ -117,7 +117,7 @@
                 for (int k = 0; k < _ColorBleedIterations; k++) {
                     offset += lerp(0.8, _ColorBleedAmount, sin(_Time.y) * 0.5 + 0.5);
                     colR += tex2D(_MainTex, uv + float2(offset + _ChromaticAberration + linesDispl + sineLinesDispl, 0) * _MainTex_TexelSize.xy).r;
-                    colG += tex2D(_MainTex, uv + float2(offset + _ChromaticAberration - linesDispl + sineLinesDispl, 0) * _MainTex_TexelSize.xy).g;
+                    colG += tex2D(_MainTex, uv + float2(offset + linesDispl + sineLinesDispl, 0) * _MainTex_TexelSize.xy).g;
                     colB += tex2D(_MainTex, uv + float2(offset + linesDispl + sineLinesDispl, 0) * _MainTex_TexelSize.xy).b;
                 }
                 colR /= _ColorBleedIterations;
