@@ -6,7 +6,7 @@ using System;
 public class EnemyManager : MonoBehaviour
 {
     [SerializeField] EnemySpawner spawner;
-    public static event Action<bool> AllEnemiesKilled;
+    public static event Action AllEnemiesKilled;
 
     [SerializeField] List<Enemy> enemiesAlive;
     bool allEnemiesCreated = false;
@@ -30,7 +30,7 @@ public class EnemyManager : MonoBehaviour
         enemiesAlive.Remove(e);
         if (enemiesAlive.Count <= 0 && allEnemiesCreated)
             if (AllEnemiesKilled != null)
-                AllEnemiesKilled(true);
+                AllEnemiesKilled();
     }
 
 }
