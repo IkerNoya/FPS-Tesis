@@ -27,9 +27,11 @@ public class Player : MonoBehaviour, IHittable
 
     bool canSwitchWeapons = true;
     bool isWeaponWheelActivated = false;
+    bool allWeaponsUnlocked = false;
 
     void Start()
     {
+
         for (int i = 0; i < weapons.Count; i++)
             weapons[i].gameObject.SetActive(false);
 
@@ -41,6 +43,7 @@ public class Player : MonoBehaviour, IHittable
         Weapon.WeaponShooted += AmmoChanged;
         PlayerHUD.ClickedWeapon += SetWeapon;
 
+        hud.SetUpgradedWeapons(false);
         ChangedHP(hpController.GetHP());
         AmmoChanged(weapons[(int)equipedWeapon].GetCurrentAmmo(), weapons[(int)equipedWeapon].GetMaxAmmo());
     }
@@ -128,6 +131,16 @@ public class Player : MonoBehaviour, IHittable
         if (Input.GetKeyDown(KeyCode.R))
             weapons[(int)equipedWeapon].Reload();
 
+
+        if (Input.GetKeyDown(KeyCode.E)) {
+            RaycastHit hit;
+            Vector3 mousePos = Input.mousePosition;
+            Ray ray = Camera.main.ScreenPointToRay(mousePos);
+
+            if (Physics.Raycast(ray, out hit, 3))
+                if (hit.collider.CompareTag("Pickable"))
+                    hit.collider.GetComponent<PickUp>().PickUpUpgrade(this);
+        }
     }
 
     void ActivateWeaponWheel()
@@ -141,7 +154,10 @@ public class Player : MonoBehaviour, IHittable
         weapons[(int)equipedWeapon].SetCanShoot(false);
         cameraMovement.SetCanMoveCamera(false);
     }
-
+    public void UnlockAllWeapons() {
+        allWeaponsUnlocked = true;
+        hud.SetUpgradedWeapons(true);
+    }
     public WeaponMode GetWeaponMode()
     {
         return equipedWeapon;
