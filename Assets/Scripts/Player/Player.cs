@@ -5,22 +5,30 @@ using System;
 
 public class Player : MonoBehaviour, IHittable {
     public enum WeaponMode {
-        Pistol, SMG, Shotgun, Rifle, GranadeLauncher
+        Pistol, SMG, Shotgun, Rifle
     }
-
+    [Header("Weapons")]
     [SerializeField] GameObject weaponWheel;
     [SerializeField] WeaponMode equipedWeapon;
     [SerializeField] List<Weapon> weapons;
+    [Header("Controllers")]
     [SerializeField] MouseLook cameraMovement;
     [SerializeField] HPController hpController;
     [SerializeField] PlayerHUD hud;
+    [Header("Granade")]
+    [SerializeField] Transform handPosition;
+    [SerializeField] GameObject granade;
+    [SerializeField] float granadeSpeed;
+    [SerializeField] float granadeTimerLimit;
 
     public static event Action<bool> Died;
     public static event Action<Player> TakeDamage;
 
     int damageTaken = 20;
+    int granadeInventory = 1;
 
-    float timer;
+    float timer = 0;
+    float granadeTimer = 0;
     float waitForHpRegen = 5f;
 
     bool canSwitchWeapons = true;
@@ -37,16 +45,19 @@ public class Player : MonoBehaviour, IHittable {
         if (weaponWheel)
             weaponWheel.SetActive(false);
 
-        Weapon.WeaponShooted += AmmoChanged;
+        Weapon.WeaponShot += AmmoChanged;
         PlayerHUD.ClickedWeapon += SetWeapon;
 
         hud.SetUpgradedWeapons(false);
         ChangedHP(hpController.GetHP());
         AmmoChanged(weapons[(int)equipedWeapon].GetCurrentAmmo(), weapons[(int)equipedWeapon].GetMaxAmmo());
+        GranadeInventoryChanged();
+
+        granadeTimer = granadeTimerLimit;
     }
 
     private void OnDisable() {
-        Weapon.WeaponShooted -= AmmoChanged;
+        Weapon.WeaponShot -= AmmoChanged;
         PlayerHUD.ClickedWeapon -= SetWeapon;
     }
 
@@ -57,7 +68,10 @@ public class Player : MonoBehaviour, IHittable {
         if (Input.GetKeyDown(KeyCode.KeypadEnter)) {
             Hit(damageTaken);
         }
-
+        if(granadeTimer<granadeTimerLimit)
+        {
+            granadeTimer += Time.deltaTime;
+        }
         if (hpController != null) {
             if (!hpController.GetCanHeal()) {
                 if (timer >= waitForHpRegen) {
@@ -85,8 +99,19 @@ public class Player : MonoBehaviour, IHittable {
                 SetWeapon(WeaponMode.Shotgun);
             else if (Input.GetKeyDown(KeyCode.Alpha4))
                 SetWeapon(WeaponMode.Rifle);
-            else if (Input.GetKeyDown(KeyCode.Alpha5))
-                SetWeapon(WeaponMode.GranadeLauncher);
+        }
+        if (Input.GetKeyDown(KeyCode.G) && granadeInventory > 0 && granadeTimer >= granadeTimerLimit)
+        {
+            granadeInventory--;
+            GameObject go = Instantiate(this.granade, handPosition.position, Quaternion.identity);
+            Granade granade = go.GetComponent<Granade>();
+            if (granade != null)
+            {
+                granade.Initialize(handPosition, granadeSpeed, 9.8f);
+                Destroy(go, 10);
+            }
+            GranadeInventoryChanged();
+            granadeTimer = 0;
         }
 
         if (Input.GetKey(KeyCode.Tab)) {
@@ -134,6 +159,8 @@ public class Player : MonoBehaviour, IHittable {
     }
     public void UnlockAllWeapons() {
         allWeaponsUnlocked = true;
+        granadeInventory += 5;
+        GranadeInventoryChanged();
         hud.SetUpgradedWeapons(true);
     }
     public WeaponMode GetWeaponMode() {
@@ -202,6 +229,10 @@ public class Player : MonoBehaviour, IHittable {
     }
     void ChangedHP(float actualHP) {
         hud.ChangeHPText(actualHP);
+    }
+    void GranadeInventoryChanged()
+    {
+        hud.ChangeGranadeText(granadeInventory);
     }
     public void HitWithStun(float damage, float stunDuration) {
         //NADA 

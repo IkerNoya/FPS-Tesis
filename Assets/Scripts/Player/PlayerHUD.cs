@@ -7,6 +7,7 @@ public class PlayerHUD : MonoBehaviour
 {
     [SerializeField] Text hpText;
     [SerializeField] Text ammoText;
+    [SerializeField] Text granadeText;
 
     [SerializeField] List<GameObject> upgradedWeapons;
 
@@ -35,7 +36,10 @@ public class PlayerHUD : MonoBehaviour
     public void ChangeAmmoText(int actualAmmo, int totalAmmo) {
         ammoText.text = actualAmmo + " / " + totalAmmo;
     }
-
+    public void ChangeGranadeText(int granadeAmmount)
+    {
+        granadeText.text = granadeAmmount.ToString();
+    }
     public void SetUpgradedWeapons(bool value) {
         for (int i = 0; i < upgradedWeapons.Count; i++)
             upgradedWeapons[i].SetActive(value);

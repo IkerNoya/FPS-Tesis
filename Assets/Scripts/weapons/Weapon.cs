@@ -39,7 +39,7 @@ public class Weapon : MonoBehaviour
     protected Vector3 mousePos;
     protected Ray ray;
 
-    public static event Action<int, int> WeaponShooted;
+    public static event Action<int, int> WeaponShot;
 
     protected virtual void Start() {
         currentAmmo = ammo;
@@ -71,8 +71,8 @@ public class Weapon : MonoBehaviour
         AmmoChanged();
     }
     protected void AmmoChanged() {
-        if (WeaponShooted != null)
-            WeaponShooted?.Invoke(currentAmmo, ammo);
+        if (WeaponShot != null)
+            WeaponShot?.Invoke(currentAmmo, ammo);
     }
     public virtual void Reload() {
         if (currentAmmo < ammo && !isReloading && canReload)
@@ -87,8 +87,8 @@ public class Weapon : MonoBehaviour
         canShoot = true;
         isReloading = false;
 
-        if (WeaponShooted != null)
-            WeaponShooted?.Invoke(currentAmmo, ammo);
+        if (WeaponShot != null)
+            WeaponShot?.Invoke(currentAmmo, ammo);
 
         yield return null;
     }
