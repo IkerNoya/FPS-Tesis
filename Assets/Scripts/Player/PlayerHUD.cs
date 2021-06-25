@@ -8,9 +8,10 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] Text hpText;
     [SerializeField] Text ammoText;
     [SerializeField] Text granadeText;
-    [SerializeField] GameObject reloadBackObject;
-    [SerializeField] GameObject reloadBarObject;
+    [SerializeField] GameObject[] reloadBarObjects;
+    [SerializeField] GameObject[] granadeBarObjects;
     [SerializeField] Image reloadBar;
+    [SerializeField] Image granadeBar;
 
     [SerializeField] List<GameObject> upgradedWeapons;
 
@@ -20,6 +21,12 @@ public class PlayerHUD : MonoBehaviour
     void Start()
     {
         Weapon.WeaponReload += ReloadImage;
+        Player.granadeThrow += GranadeBarImage;
+    }
+    private void OnDisable()
+    {
+        Weapon.WeaponReload -= ReloadImage;
+        Player.granadeThrow -= GranadeBarImage;
     }
 
     private void Update() {
@@ -58,16 +65,20 @@ public class PlayerHUD : MonoBehaviour
         if (ClickedWeapon != null)
             ClickedWeapon(weapon);
     }
-    public GameObject GetReloadBar()
+    public GameObject[] GetReloadBarObjects()
     {
-        return reloadBarObject;
+        return reloadBarObjects;
     }
-    public GameObject GetReloadBackground()
+    public GameObject[] GetGranadeBarObjects()
     {
-        return reloadBackObject;
+        return granadeBarObjects;
     }
     public void ReloadImage(float value) 
     {
         reloadBar.fillAmount = value;
+    }
+    public void GranadeBarImage(float value)
+    {
+        granadeBar.fillAmount = value;
     }
 }

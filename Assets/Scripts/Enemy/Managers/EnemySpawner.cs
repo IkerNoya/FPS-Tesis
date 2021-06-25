@@ -49,7 +49,7 @@ public class EnemySpawner : MonoBehaviour {
                     EnemyCreated(e);
             }
         }
-        Debug.Log("canWin: " + canWin);
+
     }
     public bool GetAllEnemiesCreated() {
         return (enemiesCreated >= maxCantOfEnemiesToSpawn);

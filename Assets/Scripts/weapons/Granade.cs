@@ -50,7 +50,7 @@ public class Granade : MonoBehaviour
         if(!hitTarget)
             transform.position = currentPoint;
 
-        Debug.Log(exploded);
+
     }
 
     void FixedUpdate()

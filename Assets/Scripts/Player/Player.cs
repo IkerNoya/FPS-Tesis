@@ -24,6 +24,7 @@ public class Player : MonoBehaviour, IHittable {
     public static event Action<bool> Died;
     public static event Action<Player> TakeDamage;
     public static event Action PickedUpUpgrade;
+    public static event Action<float> granadeThrow;
 
     int damageTaken = 20;
     int granadeInventory = 1;
@@ -66,12 +67,26 @@ public class Player : MonoBehaviour, IHittable {
         if (!hpController.GetIsAlive())
             return;
 
+
         if (Input.GetKeyDown(KeyCode.KeypadEnter)) {
             Hit(damageTaken);
         }
         if(granadeTimer<granadeTimerLimit)
         {
+            for (int i = 0; i < hud.GetGranadeBarObjects().Length; i++)
+            {
+                hud.GetGranadeBarObjects()[i].SetActive(true);
+            }
+            granadeThrow?.Invoke(granadeTimer / granadeTimerLimit);
             granadeTimer += Time.deltaTime;
+        }
+        else
+        {
+            for (int i = 0; i < hud.GetGranadeBarObjects().Length; i++)
+            {
+                if(hud.GetGranadeBarObjects()[i].activeSelf)
+                    hud.GetGranadeBarObjects()[i].SetActive(false);
+            }
         }
         if (hpController != null) {
             if (!hpController.GetCanHeal()) {
@@ -87,16 +102,7 @@ public class Player : MonoBehaviour, IHittable {
                 }
             }
         }
-        if(weapons[(int)equipedWeapon].GetIsReloading())
-        {
-            hud.GetReloadBar().SetActive(true); 
-            hud.GetReloadBackground().SetActive(true); 
-        }
-        else
-        {
-            hud.GetReloadBar().SetActive(false);
-            hud.GetReloadBackground().SetActive(false);
-        }
+        CheckReload();
         Inputs();
         ActivateWeaponWheel();
     }
@@ -157,7 +163,23 @@ public class Player : MonoBehaviour, IHittable {
                     hit.collider.GetComponent<PickUp>().PickUpUpgrade(this);
         }
     }
-
+    void CheckReload()
+    {
+        if (weapons[(int)equipedWeapon].GetIsReloading())
+        {
+            for (int i = 0; i < hud.GetReloadBarObjects().Length; i++)
+            {
+                hud.GetReloadBarObjects()[i].SetActive(true);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < hud.GetReloadBarObjects().Length; i++)
+            {
+                hud.GetReloadBarObjects()[i].SetActive(false);
+            }
+        }
+    }
     void ActivateWeaponWheel() {
         if (weaponWheel == null || !isWeaponWheelActivated)
             return;
