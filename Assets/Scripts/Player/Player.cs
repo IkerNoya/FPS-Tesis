@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Player : MonoBehaviour, IHittable
-{
-    public enum WeaponMode
-    {
+public class Player : MonoBehaviour, IHittable {
+    public enum WeaponMode {
         Pistol, SMG, Shotgun, Rifle, GranadeLauncher
     }
 
@@ -17,7 +15,7 @@ public class Player : MonoBehaviour, IHittable
     [SerializeField] HPController hpController;
     [SerializeField] PlayerHUD hud;
 
-    public static event Action<Player> Died;
+    public static event Action<bool> Died;
     public static event Action<Player> TakeDamage;
 
     int damageTaken = 20;
@@ -27,20 +25,22 @@ public class Player : MonoBehaviour, IHittable
 
     bool canSwitchWeapons = true;
     bool isWeaponWheelActivated = false;
+    bool allWeaponsUnlocked = false;
 
-    void Start()
-    {
+    void Start() {
+
         for (int i = 0; i < weapons.Count; i++)
             weapons[i].gameObject.SetActive(false);
 
         weapons[(int)equipedWeapon].gameObject.SetActive(true);
 
-        if(weaponWheel)
+        if (weaponWheel)
             weaponWheel.SetActive(false);
 
         Weapon.WeaponShooted += AmmoChanged;
         PlayerHUD.ClickedWeapon += SetWeapon;
 
+        hud.SetUpgradedWeapons(false);
         ChangedHP(hpController.GetHP());
         AmmoChanged(weapons[(int)equipedWeapon].GetCurrentAmmo(), weapons[(int)equipedWeapon].GetMaxAmmo());
     }
@@ -50,31 +50,24 @@ public class Player : MonoBehaviour, IHittable
         PlayerHUD.ClickedWeapon -= SetWeapon;
     }
 
-    void Update()
-    {
+    void Update() {
         if (!hpController.GetIsAlive())
             return;
 
-        if (Input.GetKeyDown(KeyCode.KeypadEnter))
-        {
+        if (Input.GetKeyDown(KeyCode.KeypadEnter)) {
             Hit(damageTaken);
         }
 
-        if (hpController != null)
-        {
-            if (!hpController.GetCanHeal())
-            {
-                if (timer >= waitForHpRegen)
-                {
+        if (hpController != null) {
+            if (!hpController.GetCanHeal()) {
+                if (timer >= waitForHpRegen) {
                     hpController.SetCanHeal(true);
                     timer = 0;
                 }
                 timer += Time.deltaTime;
             }
-            else
-            {
-                if (hpController.GetHP() < hpController.GetMaxHP())
-                {
+            else {
+                if (hpController.GetHP() < hpController.GetMaxHP()) {
                     hpController.RegenerateHP(10);
                 }
             }
@@ -82,56 +75,54 @@ public class Player : MonoBehaviour, IHittable
         Inputs();
         ActivateWeaponWheel();
     }
-    void Inputs()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            SetWeapon(WeaponMode.Pistol);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            SetWeapon(WeaponMode.SMG);    
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            SetWeapon(WeaponMode.Shotgun);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            SetWeapon(WeaponMode.Rifle);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            SetWeapon(WeaponMode.GranadeLauncher);
+    void Inputs() {
+        if (allWeaponsUnlocked) {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+                SetWeapon(WeaponMode.Pistol);
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+                SetWeapon(WeaponMode.SMG);
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
+                SetWeapon(WeaponMode.Shotgun);
+            else if (Input.GetKeyDown(KeyCode.Alpha4))
+                SetWeapon(WeaponMode.Rifle);
+            else if (Input.GetKeyDown(KeyCode.Alpha5))
+                SetWeapon(WeaponMode.GranadeLauncher);
         }
 
-        if (Input.GetKey(KeyCode.Tab))
-        {
+        if (Input.GetKey(KeyCode.Tab)) {
             isWeaponWheelActivated = true;
         }
-        else if (Input.GetKeyUp(KeyCode.Tab))
-        {
+        else if (Input.GetKeyUp(KeyCode.Tab)) {
             isWeaponWheelActivated = false;
             Time.timeScale = 1;
             if (weaponWheel)
                 weaponWheel.SetActive(false);
 
             Cursor.lockState = CursorLockMode.Locked;
-            if(canSwitchWeapons)
+            if (canSwitchWeapons)
                 weapons[(int)equipedWeapon].SetCanShoot(true);
 
             cameraMovement.SetCanMoveCamera(true);
         }
 
-        if (Input.GetButton("Fire1")) 
+        if (Input.GetButton("Fire1"))
             weapons[(int)equipedWeapon].Shoot();
         if (Input.GetKeyDown(KeyCode.R))
             weapons[(int)equipedWeapon].Reload();
 
+
+        if (Input.GetKeyDown(KeyCode.E)) {
+            RaycastHit hit;
+            Vector3 mousePos = Input.mousePosition;
+            Ray ray = Camera.main.ScreenPointToRay(mousePos);
+
+            if (Physics.Raycast(ray, out hit, 3))
+                if (hit.collider.CompareTag("Pickable"))
+                    hit.collider.GetComponent<PickUp>().PickUpUpgrade(this);
+        }
     }
 
-    void ActivateWeaponWheel()
-    {
+    void ActivateWeaponWheel() {
         if (weaponWheel == null || !isWeaponWheelActivated)
             return;
 
@@ -141,46 +132,43 @@ public class Player : MonoBehaviour, IHittable
         weapons[(int)equipedWeapon].SetCanShoot(false);
         cameraMovement.SetCanMoveCamera(false);
     }
-
-    public WeaponMode GetWeaponMode()
-    {
+    public void UnlockAllWeapons() {
+        allWeaponsUnlocked = true;
+        hud.SetUpgradedWeapons(true);
+    }
+    public WeaponMode GetWeaponMode() {
         return equipedWeapon;
     }
 
-    public List<Weapon> GetWeapons()
-    {
+    public List<Weapon> GetWeapons() {
         return weapons;
     }
 
-    public void Hit(float damage)
-    {
-        if (hpController != null)
-        {
+    public void Hit(float damage) {
+        if (hpController != null) {
             hpController.TakeDamage((int)damage);
             hpController.SetCanHeal(false);
-            if (hpController.GetHP() <= 0)
-                Died?.Invoke(this);
+            if (hpController.GetHP() <= 0) {
+                for (int i = 0; i < weapons.Count; i++)
+                    weapons[i].StopWeapon();
+                Died?.Invoke(false);
+            }
             TakeDamage?.Invoke(this);
             ChangedHP(hpController.GetHP());
         }
         timer = 0;
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Enemy"))
-        {
+    void OnTriggerEnter(Collider other) {
+        if (other.gameObject.CompareTag("Enemy")) {
             Hit(damageTaken);
         }
     }
 
-    IEnumerator WeaponSwitch()
-    {
+    IEnumerator WeaponSwitch() {
         canSwitchWeapons = false;
-        for (int i = 0; i < weapons.Count; i++)
-        {
-            if(i == (int)equipedWeapon)
-            {
+        for (int i = 0; i < weapons.Count; i++) {
+            if (i == (int)equipedWeapon) {
                 weapons[i].SetCanShoot(false);
                 weapons[i].GetComponent<Animator>().SetTrigger("WeaponChange");
                 yield return new WaitForSeconds(1);
@@ -196,9 +184,8 @@ public class Player : MonoBehaviour, IHittable
         canSwitchWeapons = true;
         yield return null;
     }
-    
-    public void SetWeapon(WeaponMode mode)
-    {
+
+    public void SetWeapon(WeaponMode mode) {
         if (!canSwitchWeapons)
             return;
 
@@ -216,8 +203,7 @@ public class Player : MonoBehaviour, IHittable
     void ChangedHP(float actualHP) {
         hud.ChangeHPText(actualHP);
     }
-    public void HitWithStun(float damage, float stunDuration)
-    {
+    public void HitWithStun(float damage, float stunDuration) {
         //NADA 
     }
 

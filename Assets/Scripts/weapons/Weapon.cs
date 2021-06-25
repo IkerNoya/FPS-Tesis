@@ -41,11 +41,6 @@ public class Weapon : MonoBehaviour
 
     public static event Action<int, int> WeaponShooted;
 
-    void Awake()
-    {
-        Player.Died += PlayerDied;
-    }
-
     protected virtual void Start() {
         currentAmmo = ammo;
     }
@@ -97,7 +92,7 @@ public class Weapon : MonoBehaviour
 
         yield return null;
     }
-    void PlayerDied(Player player)
+   public void StopWeapon()
     {
         canReload = false;
         canShoot = false;
@@ -122,10 +117,5 @@ public class Weapon : MonoBehaviour
     public bool GetCanShoot()
     {
         return canShoot;
-    }
-
-    void OnDestroy()
-    {
-        Player.Died -= PlayerDied;
     }
 }

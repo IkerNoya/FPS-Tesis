@@ -12,14 +12,17 @@ public class EnemySpawner : MonoBehaviour {
     [SerializeField] int maxCantOfEnemiesToSpawn;
     [SerializeField] int enemiesToCreateForIteration;
     [SerializeField] Transform enemiesParent;
+    [SerializeField] bool canCreateEnemies = false;
 
-    public static event Action<EnemySpawner> EndGame;
+    public static event Action<Enemy> EnemyCreated;
 
     void Update() {
-        if (enemiesCreated >= maxCantOfEnemiesToSpawn){
-            EndGame?.Invoke(this);
+        if (!canCreateEnemies)
             return;
-        }
+
+        if (enemiesCreated >= maxCantOfEnemiesToSpawn)
+            return;
+        
 
         timerToSpawn += Time.deltaTime;
         if(timerToSpawn >= timeBetweenSpawns) {
@@ -35,7 +38,17 @@ public class EnemySpawner : MonoBehaviour {
 
                 spawnerPositionsAux.RemoveAt(randomPosition);
                 enemiesCreated++;
+
+                if (EnemyCreated != null)
+                    EnemyCreated(e);
             }
         }
+    }
+
+    public void SetCanCreateEnemies(bool value) {
+        canCreateEnemies = value;
+    }
+    public bool GetAllEnemiesCreated() {
+        return (enemiesCreated >= maxCantOfEnemiesToSpawn);
     }
 }

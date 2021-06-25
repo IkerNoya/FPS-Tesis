@@ -3018,6 +3018,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpText: {fileID: 1548867511319462979}
   ammoText: {fileID: 7466982976428504766}
+  upgradedWeapons:
+  - {fileID: 1104870996}
+  - {fileID: 2061694224}
+  - {fileID: 1757828864}
+  - {fileID: 1654506387}
 --- !u!114 &5296934885559831914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3041,6 +3046,7 @@ MonoBehaviour:
   cameraMovement: {fileID: 3680331119627920093}
   hpController: {fileID: 6380721928975121257}
   hud: {fileID: 1218080501679748528}
+  distanceToPickUp: 3
 --- !u!114 &6380721928975121257
 MonoBehaviour:
   m_ObjectHideFlags: 0
