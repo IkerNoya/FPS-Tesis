@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Player.Died += EndGame;
-        //EnemyManager.AllEnemiesKilled += EndGame;
+        EnemyManager.AllHordesKilled += EndGame;
     }
 
     void EndGame(bool winGame) {
@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
 
     void OnDisable()
     {
-        //EnemyManager.AllEnemiesKilled -= EndGame;
+        EnemyManager.AllHordesKilled -= EndGame;
         Player.Died -= EndGame;
     }
 }

@@ -2991,13 +2991,12 @@ MonoBehaviour:
   enemiesPrefabs:
   - {fileID: 128795003433030196, guid: 8c092274fad88a4478db8df80ee25241, type: 3}
   - {fileID: 8488145869334697760, guid: ca5ba554c96f58d4b98167a414148e5a, type: 3}
-  timeBetweenSpawns: 15
-  timerToSpawn: 12
+  timeBetweenSpawns: 5
+  timerToSpawn: 0
   enemiesCreated: 0
   maxCantOfEnemiesToSpawn: 5
   enemiesToCreateForIteration: 5
   enemiesParent: {fileID: 1874401901}
-  canCreateEnemies: 0
 --- !u!4 &2056527945
 Transform:
   m_ObjectHideFlags: 0
@@ -4417,6 +4416,11 @@ PrefabInstance:
     - target: {fileID: 8444136966567526409, guid: d521f9106ab35bc4c8777dfbf5afa607,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8444136967032570669, guid: d521f9106ab35bc4c8777dfbf5afa607,
+        type: 3}
+      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

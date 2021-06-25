@@ -86,10 +86,13 @@ public class Enemy : MonoBehaviour, IHittable {
     }
 
     public virtual void HitWithStun(float damage, float stunDuration) {
-        stunned = true;
-        maxTimerStunned = stunDuration;
-        navMeshAgent.isStopped = true;
-        navMeshAgent.velocity = Vector3.zero;
+        if (!stunned)
+        {
+            stunned = true;
+            maxTimerStunned = stunDuration;
+            navMeshAgent.isStopped = true;
+            navMeshAgent.velocity = Vector3.zero;
+        }
 
         Hit(damage);
     }

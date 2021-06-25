@@ -36,7 +36,7 @@ public class Shotgun : Weapon
         {
             Vector3 spread = Vector3.zero;
             spread += new Vector3(ray.direction.x + points[i].x, ray.direction.y + points[i].y, ray.direction.z + points[i].x); 
-            if (Physics.Raycast(ray.origin, ray.direction + spread.normalized * Random.Range(0f,0.1f) , out hit, range))
+            if (Physics.Raycast(ray.origin, ray.direction + spread.normalized * Random.Range(0f,0.2f) , out hit, range))
             {
                 Debug.DrawRay(ray.origin, (ray.direction + spread.normalized * Random.Range(0f, 0.1f)) * range, Color.red);
                 if (hit.collider.CompareTag("Enemy"))

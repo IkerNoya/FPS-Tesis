@@ -12,13 +12,19 @@ public class EnemySpawner : MonoBehaviour {
     [SerializeField] int maxCantOfEnemiesToSpawn;
     [SerializeField] int enemiesToCreateForIteration;
     [SerializeField] Transform enemiesParent;
-    [SerializeField] bool canCreateEnemies = false;
+    bool canWin = false;
 
     public static event Action<Enemy> EnemyCreated;
+    void Start()
+    {
+        Player.PickedUpUpgrade += RestartSpawning;    
+    }
+    void OnDisable()
+    {
+        Player.PickedUpUpgrade -= RestartSpawning;
+    }
 
     void Update() {
-        if (!canCreateEnemies)
-            return;
 
         if (enemiesCreated >= maxCantOfEnemiesToSpawn)
             return;
@@ -43,12 +49,19 @@ public class EnemySpawner : MonoBehaviour {
                     EnemyCreated(e);
             }
         }
-    }
-
-    public void SetCanCreateEnemies(bool value) {
-        canCreateEnemies = value;
+        Debug.Log("canWin: " + canWin);
     }
     public bool GetAllEnemiesCreated() {
         return (enemiesCreated >= maxCantOfEnemiesToSpawn);
+    }
+
+    void RestartSpawning()
+    {
+        canWin = true;
+        enemiesCreated = 0;
+    }
+    public bool GetCanWin()
+    {
+        return canWin;  
     }
 }

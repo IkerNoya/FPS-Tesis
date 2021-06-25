@@ -23,6 +23,7 @@ public class Player : MonoBehaviour, IHittable {
 
     public static event Action<bool> Died;
     public static event Action<Player> TakeDamage;
+    public static event Action PickedUpUpgrade;
 
     int damageTaken = 20;
     int granadeInventory = 1;
@@ -158,6 +159,7 @@ public class Player : MonoBehaviour, IHittable {
         cameraMovement.SetCanMoveCamera(false);
     }
     public void UnlockAllWeapons() {
+        PickedUpUpgrade?.Invoke();
         allWeaponsUnlocked = true;
         granadeInventory += 5;
         GranadeInventoryChanged();

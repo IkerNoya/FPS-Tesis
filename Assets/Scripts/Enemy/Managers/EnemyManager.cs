@@ -7,6 +7,7 @@ public class EnemyManager : MonoBehaviour
 {
     [SerializeField] EnemySpawner spawner;
     public static event Action AllEnemiesKilled;
+    public static event Action<bool> AllHordesKilled;
 
     [SerializeField] List<Enemy> enemiesAlive;
     bool allEnemiesCreated = false;
@@ -15,7 +16,6 @@ public class EnemyManager : MonoBehaviour
         EnemySpawner.EnemyCreated += CreatedEnemy;
         Enemy.Killed += KilledEnemy;
 
-        spawner.SetCanCreateEnemies(true);
     }
     void OnDisable() {
         EnemySpawner.EnemyCreated -= CreatedEnemy;
@@ -28,9 +28,10 @@ public class EnemyManager : MonoBehaviour
     }
     void KilledEnemy(Enemy e) {
         enemiesAlive.Remove(e);
-        if (enemiesAlive.Count <= 0 && allEnemiesCreated)
-            if (AllEnemiesKilled != null)
-                AllEnemiesKilled();
+        if (enemiesAlive.Count <= 0 && allEnemiesCreated && !spawner.GetCanWin())
+                AllEnemiesKilled?.Invoke();
+        else if (enemiesAlive.Count <= 0 && allEnemiesCreated && spawner.GetCanWin())
+            AllHordesKilled?.Invoke(true);
     }
 
 }
