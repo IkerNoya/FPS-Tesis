@@ -38,8 +38,10 @@ public class Weapon : MonoBehaviour
     protected RaycastHit hit;
     protected Vector3 mousePos;
     protected Ray ray;
+    float reloadTimer = 0;
 
     public static event Action<int, int> WeaponShot;
+    public static event Action<float> WeaponReload;
 
     protected virtual void Start() {
         currentAmmo = ammo;
@@ -50,6 +52,12 @@ public class Weapon : MonoBehaviour
         ray = cam.ScreenPointToRay(mousePos);
         Debug.DrawRay(transform.position, ray.direction * range, Color.magenta);
         shootTimer -= Time.deltaTime;
+        if (isReloading)
+        {
+            reloadTimer += Time.deltaTime;
+            WeaponReload?.Invoke(ReloadValue(reloadTimer, reloadSpeed));
+        }
+        else reloadTimer = 0;
     }
     public virtual void Shoot()
     {
@@ -77,6 +85,10 @@ public class Weapon : MonoBehaviour
     public virtual void Reload() {
         if (currentAmmo < ammo && !isReloading && canReload)
             StartCoroutine(Reload(reloadSpeed));
+    }
+    float ReloadValue(float rTimer, float rLimit)
+    {
+        return (rTimer / rLimit);
     }
     protected IEnumerator Reload(float timer)
     {
@@ -118,4 +130,9 @@ public class Weapon : MonoBehaviour
     {
         return canShoot;
     }
+    public bool GetIsReloading()
+    {
+        return isReloading;
+    }
+
 }

@@ -87,6 +87,16 @@ public class Player : MonoBehaviour, IHittable {
                 }
             }
         }
+        if(weapons[(int)equipedWeapon].GetIsReloading())
+        {
+            hud.GetReloadBar().SetActive(true); 
+            hud.GetReloadBackground().SetActive(true); 
+        }
+        else
+        {
+            hud.GetReloadBar().SetActive(false);
+            hud.GetReloadBackground().SetActive(false);
+        }
         Inputs();
         ActivateWeaponWheel();
     }

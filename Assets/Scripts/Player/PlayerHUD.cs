@@ -8,12 +8,19 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] Text hpText;
     [SerializeField] Text ammoText;
     [SerializeField] Text granadeText;
+    [SerializeField] GameObject reloadBackObject;
+    [SerializeField] GameObject reloadBarObject;
+    [SerializeField] Image reloadBar;
 
     [SerializeField] List<GameObject> upgradedWeapons;
 
     [SerializeField] GameObject pickupText;
 
     public static event Action<int> ClickedWeapon;
+    void Start()
+    {
+        Weapon.WeaponReload += ReloadImage;
+    }
 
     private void Update() {
         RaycastHit hit;
@@ -33,7 +40,8 @@ public class PlayerHUD : MonoBehaviour
     public void ChangeHPText(float hp) {
         hpText.text = "HP: " + hp;
     }
-    public void ChangeAmmoText(int actualAmmo, int totalAmmo) {
+    public void ChangeAmmoText(int actualAmmo, int totalAmmo)
+    {
         ammoText.text = actualAmmo + " / " + totalAmmo;
     }
     public void ChangeGranadeText(int granadeAmmount)
@@ -49,5 +57,17 @@ public class PlayerHUD : MonoBehaviour
     {
         if (ClickedWeapon != null)
             ClickedWeapon(weapon);
+    }
+    public GameObject GetReloadBar()
+    {
+        return reloadBarObject;
+    }
+    public GameObject GetReloadBackground()
+    {
+        return reloadBackObject;
+    }
+    public void ReloadImage(float value) 
+    {
+        reloadBar.fillAmount = value;
     }
 }
