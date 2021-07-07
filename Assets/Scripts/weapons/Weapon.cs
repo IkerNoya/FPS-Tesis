@@ -90,6 +90,7 @@ public class Weapon : MonoBehaviour
     {
         return (rTimer / rLimit);
     }
+ 
     protected IEnumerator Reload(float timer)
     {
         isReloading = true;

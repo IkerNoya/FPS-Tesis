@@ -5,7 +5,8 @@ using System;
 public class ObjectiveManager : MonoBehaviour {
 
     [SerializeField] GameObject door;
-    
+
+    public static event Action CompletedObjective;
     void Start() {
         EnemyManager.AllEnemiesKilled += CompleteObjective;
     }
@@ -16,6 +17,7 @@ public class ObjectiveManager : MonoBehaviour {
 
     void CompleteObjective() {
         door.GetComponent<Animation>().Play();
+        CompletedObjective?.Invoke();
     }
 
 }

@@ -498,9 +498,9 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "           WASD => MOVE\n          SPACE => JUMP\n  LEFT SHIFT => RUN\n                  
-    C => CROUCH\n                   R => RELOAD\n\t               Q => GRAB OBJECTS\n 
-    LEFT CLICK => SHOOT\nRIGHT CLICK => THROW OBJECT\n               TAB => WEAPON
-    WHEEL\n"
+    C => CROUCH\n                   R => RELOAD\n\t               Q => GRAB OBJECTS\n\t\t          
+    G => Throw Granades\n  LEFT CLICK => SHOOT\nRIGHT CLICK => THROW OBJECT\n              
+    TAB => WEAPON WHEEL\n"
 --- !u!222 &295820398
 CanvasRenderer:
   m_ObjectHideFlags: 0

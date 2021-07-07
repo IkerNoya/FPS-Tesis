@@ -49,6 +49,7 @@ public class Player : MonoBehaviour, IHittable {
 
         Weapon.WeaponShot += AmmoChanged;
         PlayerHUD.ClickedWeapon += SetWeapon;
+        ObjectiveManager.CompletedObjective += ObjectiveCompleted;
 
         hud.SetUpgradedWeapons(false);
         ChangedHP(hpController.GetHP());
@@ -61,6 +62,7 @@ public class Player : MonoBehaviour, IHittable {
     private void OnDisable() {
         Weapon.WeaponShot -= AmmoChanged;
         PlayerHUD.ClickedWeapon -= SetWeapon;
+        ObjectiveManager.CompletedObjective -= ObjectiveCompleted;
     }
 
     void Update() {
@@ -190,12 +192,24 @@ public class Player : MonoBehaviour, IHittable {
         weapons[(int)equipedWeapon].SetCanShoot(false);
         cameraMovement.SetCanMoveCamera(false);
     }
+    IEnumerator ActivateHint(float time)
+    {
+        hud.GetHintText().SetActive(true);
+        yield return new WaitForSeconds(time);
+        hud.GetHintText().SetActive(false);
+        yield return null;
+    }
+    void ObjectiveCompleted()
+    {
+        StartCoroutine(ActivateHint(5));
+    }
     public void UnlockAllWeapons() {
         PickedUpUpgrade?.Invoke();
         allWeaponsUnlocked = true;
         granadeInventory += 5;
         GranadeInventoryChanged();
         hud.SetUpgradedWeapons(true);
+
     }
     public WeaponMode GetWeaponMode() {
         return equipedWeapon;

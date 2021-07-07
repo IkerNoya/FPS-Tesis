@@ -8,20 +8,25 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] Text hpText;
     [SerializeField] Text ammoText;
     [SerializeField] Text granadeText;
+
     [SerializeField] GameObject[] reloadBarObjects;
     [SerializeField] GameObject[] granadeBarObjects;
+
     [SerializeField] Image reloadBar;
     [SerializeField] Image granadeBar;
 
     [SerializeField] List<GameObject> upgradedWeapons;
 
     [SerializeField] GameObject pickupText;
+    [SerializeField] GameObject HintText;
+
 
     public static event Action<int> ClickedWeapon;
     void Start()
     {
         Weapon.WeaponReload += ReloadImage;
         Player.granadeThrow += GranadeBarImage;
+        HintText.SetActive(false);
     }
     private void OnDisable()
     {
@@ -80,5 +85,9 @@ public class PlayerHUD : MonoBehaviour
     public void GranadeBarImage(float value)
     {
         granadeBar.fillAmount = value;
+    }
+    public GameObject GetHintText()
+    {
+        return HintText;
     }
 }
