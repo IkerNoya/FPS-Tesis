@@ -13,14 +13,17 @@ public class HPController : MonoBehaviour
     bool isAlive=true;
     bool canHeal = false;
 
+    public static event Action<float> updateHP;
+
     void Start()
     {
         hp = maxHP;
     }
     public void RegenerateHP(int regenAmmount)
     {
-        if (hp < maxHP)
+        if (hp < maxHP){
             hp += regenAmmount * Time.deltaTime;
+        }
 
         if (hp > maxHP)
             hp = maxHP;

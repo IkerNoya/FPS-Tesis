@@ -101,6 +101,7 @@ public class Player : MonoBehaviour, IHittable {
             else {
                 if (hpController.GetHP() < hpController.GetMaxHP()) {
                     hpController.RegenerateHP(10);
+                    ChangedHP(hpController.GetHP());
                 }
             }
         }

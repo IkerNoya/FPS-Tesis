@@ -50,7 +50,7 @@ public class PlayerHUD : MonoBehaviour
     }
 
     public void ChangeHPText(float hp) {
-        hpText.text = "HP: " + hp;
+        hpText.text = "HP: " + (int)hp;
     }
     public void ChangeAmmoText(int actualAmmo, int totalAmmo)
     {
